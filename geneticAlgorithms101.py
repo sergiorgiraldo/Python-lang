@@ -2,13 +2,9 @@
 # -*-coding:Utf-8 -*
 
 import random
-import operator
 import time
-from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
-import numpy as np
 import functools
-import matplotlib.cm as cmx
 
 temps1 = time.time()
 
@@ -104,7 +100,6 @@ def select_breeders(population_sorted, size_of_population):
     random.shuffle(result)
     return result
 
-
 def create_child(individual1, individual2):
     result = []
     for i in range(len(individual1)):
@@ -161,7 +156,6 @@ def evolve_several_generation_with_limited_time(item_set, size_of_population, nu
 
 # analysis tools
 def get_best_individual_in_population(populationSorted):
-    print(populationSorted[0])
     return populationSorted[0]
 
 
@@ -185,8 +179,10 @@ def print_graph(number_of_child, number_of_sample, time_limit, item_set):
         print(size_of_population)
         mutationRate = 0
         graphX.append(size_of_population)
-        graphY.append(mean_result_evolve(item_set, size_of_population, number_of_child, number_of_sample, mutationRate,
-                                         time_limit))
+        result = mean_result_evolve(item_set, size_of_population, number_of_child, number_of_sample, mutationRate,
+                           time_limit)
+        print(result)
+        graphY.append(result)
     plt.plot(graphX, graphY)
     plt.show()
 
@@ -204,5 +200,3 @@ number_of_sample = 10
 # main
 item_set = generate_all_items(Number_of_item, Max_weight, Max_value)
 print_graph(number_of_child, number_of_sample, time_limit, item_set)
-
-print (time.time() - temps1)
