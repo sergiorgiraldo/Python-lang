@@ -7,7 +7,7 @@ import stringdist
 temps1 = time.time()
 
 # genetic algorithm functions
-def fitness_(passwd, testWord):
+def fitness(passwd, testWord):
     score = 0
     i = 0
     while i < len(password):
@@ -16,7 +16,7 @@ def fitness_(passwd, testWord):
         i += 1
     return score * 100 / len(passwd)
 
-def fitness(passwd, testWord):
+def fitness_(passwd, testWord):
     score = stringdist.rdlevenshtein_norm(passwd, testWord)
     return (1 - score) * 100
 
@@ -50,6 +50,7 @@ def selectFromPopulation(populationSorted, bestSample, luckyFew):
     nextGenerationAssembled = []
     for i in range(bestSample):
         nextGenerationAssembled.append(populationSorted[i][0])
+
     for i in range(luckyFew):
         nextGenerationAssembled.append(random.choice(populationSorted)[0])
     random.shuffle(nextGenerationAssembled)
@@ -157,13 +158,15 @@ def evolutionAverageFitness(populations, passwd, sizePopulation):
 
 # variables
 password = "constantinopla"
-# assert(best_sample + lucky_few) / 2 * number_of_child == size_population)
-size_population = 100
-best_sample = 30
+size_population = 20
+best_sample = 10
 lucky_few = 10
-number_of_child = 5
-number_of_generation = 100
+number_of_child = 2
+number_of_generation = 40
 chance_of_mutation = 5
+
+assert(((best_sample + lucky_few) / 2 * number_of_child) == size_population)
+
 
 # program
 if (best_sample + lucky_few) / 2 * number_of_child != size_population:
@@ -180,4 +183,4 @@ else:
     printSimpleResult(all, password, number_of_generation)
 
     evolutionBestFitness(all, password)
-    #evolutionAverageFitness(all, password, size_population)
+    evolutionAverageFitness(all, password, size_population)
