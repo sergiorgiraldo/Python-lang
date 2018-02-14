@@ -30,7 +30,6 @@ def generateAWord(length):
         i += 1
     return result
 
-
 def generateFirstPopulation(sizePopulation, passwd):
     population = []
     i = 0
@@ -48,7 +47,8 @@ def computeFitnessInPopulation(population, passwd):
     for individual in population:
         populationPerf[individual] = fitness(passwd, individual)
 
-    return sorted(populationPerf.items(), key=operator.itemgetter(1), reverse=True)
+    return sorted(populationPerf.items(), 
+        key=operator.itemgetter(1), reverse=True)
 
 
 def selectFromPopulation(populationSorted, bestSample, luckyFew):
@@ -58,9 +58,11 @@ def selectFromPopulation(populationSorted, bestSample, luckyFew):
         nextGenerationAssembled.append(populationSorted[i][0])
 
     for i in range(luckyFew):
-        nextGenerationAssembled.append(random.choice(populationSorted)[0])
+        luckyOne = random.choice(populationSorted)[0]
+        while nextGenerationAssembled.__contains__(luckyOne):
+            luckyOne = random.choice(populationSorted)[0]
+        nextGenerationAssembled.append(luckyOne)
 
-    random.shuffle(nextGenerationAssembled)
     return nextGenerationAssembled
 
 
@@ -78,7 +80,10 @@ def createChildren(breeders, numberOfChild):
     nextPopulation = []
     for i in range(round(len(breeders) / 2)):
         for j in range(numberOfChild):
-            nextPopulation.append(createChild(breeders[i], breeders[len(breeders) - 1 - i]))
+            nextPopulation.append(
+                createChild(
+                    breeders[i], 
+                    breeders[len(breeders) - 1 - i]))
     return nextPopulation
 
 
@@ -98,14 +103,15 @@ def mutatePopulation(population, chanceOfMutation):
     return population
 
 
-def nextGeneration(currentGeneration, passwd, bestSample, luckyFew, numberOfChild, chanceOfMutation):
+def nextGeneration(currentGeneration, passwd, bestSample, luckyFew, numberOfChild, 
+    chanceOfMutation):
     populationSorted = computeFitnessInPopulation(currentGeneration, passwd)
     nextBreeders = selectFromPopulation(populationSorted, bestSample, luckyFew)
     nextPopulation = createChildren(nextBreeders, numberOfChild)
+    random.shuffle(nextPopulation)
     nextPopulation = mutatePopulation(nextPopulation, chanceOfMutation)
 
     nextPopulationCleaned = list(OrderedDict.fromkeys(nextPopulation))
-
     for i in range(len(nextPopulationCleaned), len(currentGeneration)):
         nextPopulationCleaned.append(generateAWord(len(passwd)))
 
@@ -174,11 +180,11 @@ def evolutionAverageFitness(populations, passwd, sizePopulation):
 # variables
 password = "constantinopla"
 size_population = 100
-best_sample = 50
-lucky_few = 50
-number_of_child = 2
-number_of_generation = 20
-chance_of_mutation = 50
+best_sample = 15
+lucky_few = 5
+number_of_child = 10
+number_of_generation = 50
+chance_of_mutation = 10
 
 # program
 if (best_sample + lucky_few) / 2 * number_of_child != size_population:
