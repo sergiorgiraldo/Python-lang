@@ -54,11 +54,8 @@ def computeFitnessInPopulation(population, passwd):
 def selectFromPopulation(populationSorted, bestSample, luckyFew):
     nextGenerationAssembled = []
 
-    try:
-        for i in range(bestSample):
-            nextGenerationAssembled.append(populationSorted[i][0])
-    except:
-        print("deu ruim")
+    for i in range(bestSample):
+        nextGenerationAssembled.append(populationSorted[i][0])
 
     for i in range(luckyFew):
         nextGenerationAssembled.append(random.choice(populationSorted)[0])
@@ -177,9 +174,9 @@ def evolutionAverageFitness(populations, passwd, sizePopulation):
 # variables
 password = "constantinopla"
 size_population = 100
-best_sample = 30
-lucky_few = 10
-number_of_child = 5
+best_sample = 50
+lucky_few = 50
+number_of_child = 2
 number_of_generation = 20
 chance_of_mutation = 50
 
