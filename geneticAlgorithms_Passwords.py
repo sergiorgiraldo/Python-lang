@@ -5,8 +5,6 @@ import matplotlib.pyplot as plt
 import stringdist
 from collections import OrderedDict
 
-temps1 = time.time()
-
 # genetic algorithm functions
 def fitness(passwd, testWord):
     score = 0
@@ -63,6 +61,8 @@ def selectFromPopulation(populationSorted, bestSample, luckyFew):
             luckyOne = random.choice(populationSorted)[0]
         nextGenerationAssembled.append(luckyOne)
 
+    random.shuffle(nextGenerationAssembled)
+
     return nextGenerationAssembled
 
 
@@ -108,7 +108,6 @@ def nextGeneration(currentGeneration, passwd, bestSample, luckyFew, numberOfChil
     populationSorted = computeFitnessInPopulation(currentGeneration, passwd)
     nextBreeders = selectFromPopulation(populationSorted, bestSample, luckyFew)
     nextPopulation = createChildren(nextBreeders, numberOfChild)
-    random.shuffle(nextPopulation)
     nextPopulation = mutatePopulation(nextPopulation, chanceOfMutation)
 
     nextPopulationCleaned = list(OrderedDict.fromkeys(nextPopulation))
@@ -179,12 +178,12 @@ def evolutionAverageFitness(populations, passwd, sizePopulation):
 
 # variables
 password = "constantinopla"
-size_population = 100
-best_sample = 15
+size_population = 20
+best_sample = 5
 lucky_few = 5
-number_of_child = 10
-number_of_generation = 50
-chance_of_mutation = 10
+number_of_child = 4
+number_of_generation = 300
+chance_of_mutation = 20
 
 # program
 if (best_sample + lucky_few) / 2 * number_of_child != size_population:
