@@ -1,8 +1,8 @@
-# Import libraries
-import pandas as pd
-import numpy as np
-from sklearn import linear_model
-from scipy import stats
+# Import libraries 
+import pandas as pd 
+import numpy as np 
+from sklearn import linear_model 
+from scipy import stats 
 import matplotlib.pyplot as plt
 
 # Method to compute value function and decision for the "to steal or not to steal" problem
