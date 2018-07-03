@@ -3,11 +3,10 @@ import operator
 import time
 import matplotlib.pyplot as plt
 import stringdist
-
-temps1 = time.time()
+from collections import OrderedDict
 
 # genetic algorithm functions
-def fitness_(passwd, testWord):
+def fitness(passwd, testWord):
     score = 0
     i = 0
     while i < len(password):
@@ -16,7 +15,7 @@ def fitness_(passwd, testWord):
         i += 1
     return score * 100 / len(passwd)
 
-def fitness(passwd, testWord):
+def fitness_(passwd, testWord):
     score = stringdist.rdlevenshtein_norm(passwd, testWord)
     return (1 - score) * 100
 
@@ -29,30 +28,41 @@ def generateAWord(length):
         i += 1
     return result
 
-
 def generateFirstPopulation(sizePopulation, passwd):
     population = []
     i = 0
     while i < sizePopulation:
-        population.append(generateAWord(len(passwd)))
+        auxWord = generateAWord(len(passwd))
+        while (population.__contains__ (auxWord)):
+            auxWord = generateAWord(len(passwd))
+        population.append(auxWord)
         i += 1
     return population
 
-
 def computeFitnessInPopulation(population, passwd):
     populationPerf = {}
+
     for individual in population:
         populationPerf[individual] = fitness(passwd, individual)
-    return sorted(populationPerf.items(), key=operator.itemgetter(1), reverse=True)
+
+    return sorted(populationPerf.items(), 
+        key=operator.itemgetter(1), reverse=True)
 
 
 def selectFromPopulation(populationSorted, bestSample, luckyFew):
     nextGenerationAssembled = []
+
     for i in range(bestSample):
         nextGenerationAssembled.append(populationSorted[i][0])
+
     for i in range(luckyFew):
-        nextGenerationAssembled.append(random.choice(populationSorted)[0])
+        luckyOne = random.choice(populationSorted)[0]
+        while nextGenerationAssembled.__contains__(luckyOne):
+            luckyOne = random.choice(populationSorted)[0]
+        nextGenerationAssembled.append(luckyOne)
+
     random.shuffle(nextGenerationAssembled)
+
     return nextGenerationAssembled
 
 
@@ -70,7 +80,10 @@ def createChildren(breeders, numberOfChild):
     nextPopulation = []
     for i in range(round(len(breeders) / 2)):
         for j in range(numberOfChild):
-            nextPopulation.append(createChild(breeders[i], breeders[len(breeders) - 1 - i]))
+            nextPopulation.append(
+                createChild(
+                    breeders[i], 
+                    breeders[len(breeders) - 1 - i]))
     return nextPopulation
 
 
@@ -90,13 +103,18 @@ def mutatePopulation(population, chanceOfMutation):
     return population
 
 
-def nextGeneration(firstGeneration, passwd, bestSample, luckyFew, numberOfChild, chanceOfMutation):
-    populationSorted = computeFitnessInPopulation(firstGeneration, passwd)
+def nextGeneration(currentGeneration, passwd, bestSample, luckyFew, numberOfChild, 
+    chanceOfMutation):
+    populationSorted = computeFitnessInPopulation(currentGeneration, passwd)
     nextBreeders = selectFromPopulation(populationSorted, bestSample, luckyFew)
     nextPopulation = createChildren(nextBreeders, numberOfChild)
     nextPopulation = mutatePopulation(nextPopulation, chanceOfMutation)
-    return nextPopulation
 
+    nextPopulationCleaned = list(OrderedDict.fromkeys(nextPopulation))
+    for i in range(len(nextPopulationCleaned), len(currentGeneration)):
+        nextPopulationCleaned.append(generateAWord(len(passwd)))
+
+    return nextPopulationCleaned
 
 def multipleGeneration(numberOfGeneration, passwd, sizePopulation, bestSample,
                        luckyFew, numberOfChild, chanceOfMutation):
@@ -107,22 +125,25 @@ def multipleGeneration(numberOfGeneration, passwd, sizePopulation, bestSample,
     return populations
 
 
-# print result:
-def printSimpleResult(populations, passwd, numberOfGeneration):
-    result = getBestIndividualsListFromAllTimes(populations, passwd)[numberOfGeneration - 1]
-    print("solution: \"" + result[0] + "\" de fitness: " + str(result[1]))
-
 
 # analysis tools
 def getBestIndividualFromPopulation(population, passwd):
     return computeFitnessInPopulation(population, passwd)[0]
 
-def getBestIndividualsListFromAllTimes(populations, passwd):
-    bestIndividuals = []
+def getBestIndividualFromAllTimes(populations, passwd):
+    bestFitness = 0
+    bestIndividual = ""
+    bestGeneration = 0
+    generation = 0
     for population in populations:
-        bestIndividuals.append(getBestIndividualFromPopulation(population, passwd))
-    return bestIndividuals
-
+        thisBest = getBestIndividualFromPopulation(population, passwd)
+        if bestFitness < thisBest[1]:
+            bestFitness = thisBest[1]
+            bestIndividual = thisBest[0]
+            bestGeneration = generation    
+        generation = generation + 1
+    
+    print("solution: \"" + bestIndividual + "\" de fitness: " + str(bestFitness) + " na geracao " + str(bestGeneration))
 
 # graph
 def evolutionBestFitness(populations, passwd):
@@ -157,13 +178,12 @@ def evolutionAverageFitness(populations, passwd, sizePopulation):
 
 # variables
 password = "constantinopla"
-# assert(best_sample + lucky_few) / 2 * number_of_child == size_population)
-size_population = 100
-best_sample = 30
-lucky_few = 10
-number_of_child = 5
-number_of_generation = 100
-chance_of_mutation = 5
+size_population = 20
+best_sample = 5
+lucky_few = 5
+number_of_child = 4
+number_of_generation = 300
+chance_of_mutation = 20
 
 # program
 if (best_sample + lucky_few) / 2 * number_of_child != size_population:
@@ -177,7 +197,7 @@ else:
                                   number_of_child,
                                   chance_of_mutation)
 
-    printSimpleResult(all, password, number_of_generation)
+    getBestIndividualFromAllTimes(all, password)
 
     evolutionBestFitness(all, password)
-    #evolutionAverageFitness(all, password, size_population)
+    evolutionAverageFitness(all, password, size_population)
