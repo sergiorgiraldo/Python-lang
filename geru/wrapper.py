@@ -37,3 +37,7 @@ def get_quotes():
 def get_quote(quote_number):
     data = get_quotes()
     return data["quotes"][quote_number]
+
+print(get_quotes())
+print("")
+print(get_quote(0))
