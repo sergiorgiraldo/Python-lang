@@ -148,25 +148,26 @@ Missing fields will be NULL.
 homeDir = str(Path.home())
 
 #get file
-zipFilename = path.join(homeDir, 'gl2017.zip')
-with urllib.request.urlopen('https://www.retrosheet.org/gamelogs/gl2017.zip') as response, \
-        open(zipFilename, 'wb') as out_file:
-    data = response.read()
-    out_file.write(data)
-
-#unzip file
-zip_ref = zipfile.ZipFile(zipFilename, 'r') #gl2017.txt
-zip_ref.extractall(homeDir)
-zip_ref.close()
+# zipFilename = path.join(homeDir, 'gl2017.zip')
+# with urllib.request.urlopen('https://www.retrosheet.org/gamelogs/gl2017.zip') as response, \
+#         open(zipFilename, 'wb') as out_file:
+#     data = response.read()
+#     out_file.write(data)
+#
+# #unzip file
+# zip_ref = zipfile.ZipFile(zipFilename, 'r') #gl2017.txt
+# zip_ref.extractall(homeDir)
+# zip_ref.close()
 
 #read file
 dataFilename = path.join(homeDir, 'gl2017.txt')
-input_df = pd.read_table(dataFilename, sep=",", header=None)
-input_df.rename(
+df = pd.read_table(dataFilename, sep=",", header=None)
+df.rename(
         columns={3: 'Visiting Team',
                  6: 'Home Team',
                  9: 'Runs Visitor',
                  10: 'Runs Home'}, inplace=True)
 
-home_group = input_df.groupby(input_df['Home Team'])
-print(home_group)
+print(df[df['Home Team'] == 'BOS'])
+print(df.groupby(df['Home Team']).filter(lambda x: sum(x['Runs Home']) > 3))
+print(df[['Home Team', 'Runs Home']])
