@@ -148,16 +148,17 @@ Missing fields will be NULL.
 homeDir = str(Path.home())
 
 #get file
-# zipFilename = path.join(homeDir, 'gl2017.zip')
-# with urllib.request.urlopen('https://www.retrosheet.org/gamelogs/gl2017.zip') as response, \
-#         open(zipFilename, 'wb') as out_file:
-#     data = response.read()
-#     out_file.write(data)
-#
-# #unzip file
-# zip_ref = zipfile.ZipFile(zipFilename, 'r') #gl2017.txt
-# zip_ref.extractall(homeDir)
-# zip_ref.close()
+if path.exists(path.join(homeDir, 'gl2017.zip')):
+    zipFilename = path.join(homeDir, 'gl2017.zip')
+    with urllib.request.urlopen('https://www.retrosheet.org/gamelogs/gl2017.zip') as response, \
+         open(zipFilename, 'wb') as out_file:
+     data = response.read()
+     out_file.write(data)
+
+    #unzip file
+    zip_ref = zipfile.ZipFile(zipFilename, 'r') #gl2017.txt
+    zip_ref.extractall(homeDir)
+    zip_ref.close()
 
 #read file
 dataFilename = path.join(homeDir, 'gl2017.txt')
