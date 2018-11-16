@@ -1,6 +1,4 @@
 import pandas as pd
-import urllib.request
-import zipfile
 from pathlib import Path
 from os import path
 
@@ -18,3 +16,12 @@ df.rename(
                  10: 'Runs Home'}, inplace=True)
 
 #who won more, national or american league?
+df.loc[df['Runs Visitor'] > df['Runs Home'], 'Winning League'] = df[df['Runs Visitor'] > df['Runs Home']]['Visiting Team League']
+df.loc[df['Runs Visitor'] < df['Runs Home'], 'Winning League'] = df[df['Runs Visitor'] < df['Runs Home']]['Home Team League']
+
+#this give same count n-plicated in the columns
+print(df.groupby(['Winning League']).count())
+#this give same count n-plicated in the columns
+print(df.groupby(['Winning League']).agg('count'))
+
+print(df.groupby(['Winning League']).size().reset_index(name='counts'))
