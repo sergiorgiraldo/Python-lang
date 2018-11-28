@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from sklearn import linear_model
 
+
 # defining feature matrix(X) and response vector(y) 
 X = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]) 
 y = np.array([1, 3, 2, 5, 7, 8, 8, 9, 10, 12]) 
@@ -23,6 +24,7 @@ X_test = np.reshape(X_test, (-1, 1))
 reg = linear_model.LinearRegression() 
 
 # train the model using the training sets 
+#reg.fit(np.reshape(X, (-1, 1)), np.reshape(y, (-1, 1)))
 reg.fit(X_train, y_train) 
 
 # Make predictions using the testing set
