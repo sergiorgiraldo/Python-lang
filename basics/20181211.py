@@ -7,23 +7,42 @@ Created on Tue Dec 11 13:37:17 2018
 knn - classification problem
 
 https://stackabuse.com/k-nearest-neighbors-algorithm-in-python-and-scikit-learn/
+https://www.kaggle.com/lalitharajesh/iris-dataset-exploratory-data-analysis
 """
 
 import numpy as np  
 import matplotlib.pyplot as plt  
 import pandas as pd 
+from sklearn.datasets import load_iris
 
-url = "https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data"
+#get data
+iris = load_iris()
 
-# Assign colum names to the dataset
-names = ['sepal-length', 'sepal-width', 'petal-length', 'petal-width', 'Class']
+#plot
+# The indices of the features that we are plotting
+x_index = 0
+y_index = 1
 
-# Read dataset to pandas dataframe
-dataset = pd.read_csv(url, names=names)  
+# this formatter will label the colorbar with the correct target names
+formatter = plt.FuncFormatter(lambda i, *args: iris.target_names[int(i)])
 
-#Preprocessing, split our dataset into its attributes and labels
+plt.figure(figsize=(5, 4))
+plt.scatter(iris.data[:, x_index], iris.data[:, y_index], c=iris.target)
+plt.colorbar(ticks=[0, 1, 2], format=formatter)
+plt.xlabel(iris.feature_names[x_index])
+plt.ylabel(iris.feature_names[y_index])
+
+plt.tight_layout()
+plt.show()
+#**********************************
+
+#Preprocessing, tranasforma to panda and split our dataset into its attributes and labels
+dataset = pd.DataFrame(iris.data)
+dataset.columns = iris.feature_names
+dataset['CLASS'] = iris.target
 X = dataset.iloc[:, :-1].values  
 y = dataset.iloc[:, 4].values  
+
 
 #split dataset
 from sklearn.model_selection import train_test_split  
