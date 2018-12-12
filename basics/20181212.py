@@ -9,7 +9,7 @@ from copy import deepcopy
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
-plt.rcParams['figure.figsize'] = (16, 9)
+plt.rcParams['figure.figsize'] = (8, 4)
 plt.style.use('ggplot')
 
 # Importing the dataset
@@ -44,12 +44,14 @@ plt.scatter(C_x, C_y, marker='o', s=100, c='red')
 
 # To store the value of centroids when it updates
 C_old = np.zeros(C.shape)
-# Cluster Lables(0, 1, 2)
+# Cluster Labels(0, 1, 2)
 clusters = np.zeros(len(X))
 # Error func. - Distance between new centroids and old centroids
 error = dist(C, C_old, None)
 # Loop will run till the error becomes zero
+iterations = 0
 while error != 0:
+    iterations += 1
     # Assigning each value to its closest cluster
     for i in range(len(X)):
         distances = dist(X[i], C)
@@ -62,6 +64,8 @@ while error != 0:
         points = [X[j] for j in range(len(X)) if clusters[j] == i]
         C[i] = np.mean(points, axis=0)
     error = dist(C, C_old, None)
+
+print("Converged in %d iterations" % iterations)
 
 colors = ['orange', 'magenta', 'blue'] #'red', 'green', 'blue', 'yellow', 'cyan', 'magenta', 'orange'
 fig, ax = plt.subplots()
