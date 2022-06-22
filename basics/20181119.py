@@ -24,3 +24,7 @@ print(lstNumbers)
 lstNumbers = [i for i in lstNumbers if test(i)]
 
 print(lstNumbers)
+
+lstFives = [i for i in lstNumbers if i % 5 == 0 & (str(i)).endswith('5')]
+
+print(lstFives)
