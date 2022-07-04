@@ -10,3 +10,6 @@ def test_CheckRed(colorsAvailable):
 
 def test_CheckBlack(colorsAvailable):
 	assert ("black" in colorsAvailable) ,"black not available"
+
+def test_CheckGreen(colorsAvailable):
+	assert ("green" in colorsAvailable) ,"green not available"
