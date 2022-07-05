@@ -26,8 +26,7 @@ class Parking:
 				R.starting.date() == datetime.now().date() and 
 				R.spot == ParkingReservation.spot]:
 			if not reservation.plate == ParkingReservation.plate:
-				
-				" 
+				msg = "Another car in the spot today"
 		return msg
 
 	def ListAvailableSpots(self): #dummy logic, evaluate if the reservation is on the same day
@@ -44,3 +43,11 @@ class Parking:
 		AvailableSpots = Parking.ListAvailableSpots(self)
 
 		return len(AvailableSpots)
+
+	def CheckSpot(self, spot, starting, ending):
+		result = True
+		for reservation in [R for R in self.reservations if spot in R.spot]:
+			if reservation.starting.date() == starting.date() or reservation.ending.date() == ending.date() :
+				result = False
+				break
+		return result	
