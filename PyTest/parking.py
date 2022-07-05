@@ -25,7 +25,7 @@ class Parking:
 		for reservation in [R for R in self.reservations if 
 				R.starting.date() == datetime.now().date() and 
 				R.spot == ParkingReservation.spot]:
-			if not reservation.plate == ParkingReservation.plate:
+			if reservation.plate != ParkingReservation.plate:
 				msg = "Another car in the spot today"
 		return msg
 
@@ -41,13 +41,9 @@ class Parking:
 
 	def CountAvailableSpots(self):
 		AvailableSpots = Parking.ListAvailableSpots(self)
-
 		return len(AvailableSpots)
 
 	def CheckSpot(self, spot, starting, ending):
-		result = True
-		for reservation in [R for R in self.reservations if spot in R.spot]:
-			if reservation.starting.date() == starting.date() or reservation.ending.date() == ending.date() :
-				result = False
-				break
-		return result	
+		return not any(
+		    reservation.starting.date() == starting.date() or reservation.ending.date() == ending.date()
+		    for reservation in [R for R in self.reservations if spot in R.spot])	

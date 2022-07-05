@@ -1,5 +1,6 @@
 from parking import *
 from datetime import datetime, timedelta
+from hamcrest import *
 
 now = datetime.now()
 startDateToday = datetime(now.year, now.month, now.day, 11, 30)
@@ -10,85 +11,78 @@ endDateTodayLater =datetime(now.year, now.month, now.day, 14, 30)
 tomorrow = datetime.now() + timedelta(days=1)
 startDateTomorrow = datetime(tomorrow.year, tomorrow.month, tomorrow.day, 11, 30)
 endDateTomorrow =datetime(tomorrow.year, tomorrow.month, tomorrow.day, 12, 30)
+    
+firstReservation = ParkingReservation("F1234", "A1", startDateToday, endDateToday)
 
 def test_AddReservation():
     P = Parking()
-    firstReservation = ParkingReservation("F1234", "A1", startDateToday, endDateToday)
     P.AddReservation(firstReservation)
-    assert len(P.reservations) == 1
+    assert_that(len(P.reservations), is_(1))
 
 def test_AvailabilityFull():
     P = Parking()
     P.reservations.clear()
-    assert P.CountAvailableSpots() == len(P.Spots)
+    assert_that(P.CountAvailableSpots(), equal_to(len(P.Spots)))
 
 def test_AvailabilityJustOne():
     P = Parking()
-    firstReservation = ParkingReservation("F1234", "A1", startDateToday, endDateToday)
-    msg = P.AddReservation(firstReservation)
-    assert P.CountAvailableSpots() == (len(P.Spots) - 1), msg
+    P.AddReservation(firstReservation)
+    assert_that(P.CountAvailableSpots(), equal_to(len(P.Spots) -1))
 
 def test_AvailabilityHasReservationForTomorrow():
     P = Parking()
-    firstReservation = ParkingReservation("F1234", "A1", startDateTomorrow, endDateTomorrow)
-    P.AddReservation(firstReservation)
-    assert len(P.reservations) == 1
-    assert P.CountAvailableSpots() == len(P.Spots)
+    otherReservation = ParkingReservation("F1234", "A1", startDateTomorrow, endDateTomorrow)
+    P.AddReservation(otherReservation)
+    assert_that(len(P.reservations), is_(1))
+    assert_that(P.CountAvailableSpots(), equal_to(len(P.Spots)))
 
 def test_AvailabilityCheckSpot():
     P = Parking()
-    assert "A1" in P.ListAvailableSpots()
-    firstReservation = ParkingReservation("F1234", "A1", startDateToday, endDateToday)
+    assert_that("A1", is_in(P.ListAvailableSpots())) 
     P.AddReservation(firstReservation)
-    assert "A1" not in P.ListAvailableSpots()
+    assert_that("A1", not is_in(P.ListAvailableSpots())) 
 
 def test_ValidationAcceptSamePlateSameSpot():
     P = Parking()
-    firstReservation = ParkingReservation("F1234", "A1", startDateToday, endDateToday)
     msg = P.AddReservation(firstReservation)
-    assert (msg == "")
+    assert_that(msg, is_(""))
 
-    secondReservation = ParkingReservation("F1234", "A1", startDateTodayLater, endDateTodayLater)
-    msg = P.AddReservation(secondReservation)
-    assert (msg == "")
-
-    assert len(P.reservations) == 2
+    otherReservation = ParkingReservation("F1234", "A1", startDateTodayLater, endDateTodayLater)
+    msg = P.AddReservation(otherReservation)
+    assert_that(msg, is_(""))
+    assert_that(len(P.reservations), is_(2))
 
 def test_CheckIfSpotIsAvailable_Is():
     P = Parking()
-    firstReservation = ParkingReservation("F1234", "A1", startDateToday, endDateToday)
     P.AddReservation(firstReservation)
-    result = P.CheckSpot("A1", startDateTomorrow, endDateTomorrow)
-    assert (result)
+    spotIsAvailable = P.CheckSpot("A1", startDateTomorrow, endDateTomorrow)
+    assert_that(spotIsAvailable)
 
 def test_CheckIfSpotIsAvailable_IsNot():
     P = Parking()
-    firstReservation = ParkingReservation("F1234", "A1", startDateToday, endDateToday)
     P.AddReservation(firstReservation)
-    result = P.CheckSpot("A1", startDateToday, endDateToday)
-    assert (not result)
+    spotAvailable = P.CheckSpot("A1", startDateToday, endDateToday)
+    assert_that(is_not(spotAvailable))
 
 def test_ValidationAcceptDifferentPlateDifferentSpot():
     P = Parking()
-    firstReservation = ParkingReservation("F1234", "A1", startDateToday, endDateToday)
     msg = P.AddReservation(firstReservation)
-    assert (msg == "")
+    assert_that(msg, is_(""))
 
-    secondReservation = ParkingReservation("F5678", "A2", startDateToday, endDateToday)
-    msg = P.AddReservation(secondReservation)
-    assert (msg == "")
+    otherReservation = ParkingReservation("F5678", "A2", startDateToday, endDateToday)
+    msg = P.AddReservation(otherReservation)
+    assert_that(msg, is_(""))
 
-    assert len(P.reservations) == 2
+    assert_that(len(P.reservations), is_(2))
 
 def test_ValidationReject():
     P = Parking()
-    firstReservation = ParkingReservation("F1234", "A1", startDateToday, endDateToday)
     msg = P.AddReservation(firstReservation)
-    assert (msg == "")
+    assert_that(msg, is_(""))
 
-    secondReservation = ParkingReservation("F5678", "A1", startDateTodayLater, endDateTodayLater)
-    msg = P.AddReservation(secondReservation)
-    assert (not msg == "")
+    otherReservation = ParkingReservation("F5678", "A1", startDateTodayLater, endDateTodayLater)
+    msg = P.AddReservation(otherReservation)
+    assert_that(msg, is_not(""))
     
-    assert len(P.reservations) == 1
+    assert_that(len(P.reservations), is_(1))
 
