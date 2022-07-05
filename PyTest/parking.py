@@ -36,7 +36,6 @@ class Parking:
 				spot in R.spot]:
 				if reservation.starting.date() == datetime.now().date():
 					AvailableSpots.remove(spot)
-
 		return AvailableSpots
 
 	def CountAvailableSpots(self):
