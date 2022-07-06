@@ -12,7 +12,36 @@ tomorrow = datetime.now() + timedelta(days=1)
 startDateTomorrow = datetime(tomorrow.year, tomorrow.month, tomorrow.day, 11, 30)
 endDateTomorrow =datetime(tomorrow.year, tomorrow.month, tomorrow.day, 12, 30)
     
-firstReservation = ParkingReservation("F1234", "A1", startDateToday, endDateToday)
+firstReservation = ParkingReservation.Create("F1234", "A1", startDateToday, endDateToday)
+
+def test_CreateReservation():
+    result = ParkingReservation.Create("F1234", "A1", startDateToday, endDateToday)    
+    assert_that(result, instance_of(ParkingReservation))
+
+def test_CreateReservationWithoutPlate_ThrowsException():
+    assert_that(
+        calling(ParkingReservation.Create).
+            with_args("", "A1", startDateToday, endDateToday), 
+        raises (Exception, "plate must be filled"))
+
+def test_CreateReservationWithoutSpot_ThrowsException():
+    assert_that(
+        calling(ParkingReservation.Create).
+            with_args("F1234", "", startDateToday, endDateToday), 
+        raises (Exception, "spot must be filled"))
+
+def test_CreateReservationWithoutStarting_ThrowsException():
+    assert_that(
+        calling(ParkingReservation.Create).
+            with_args("F1234", "A1", "", endDateToday), 
+        raises (Exception, "starting must be filled"))
+
+def test_CreateReservationWithoutEnding_ThrowsException():
+    assert_that(
+        calling(ParkingReservation.Create).
+            with_args("F1234", "A1", startDateToday, ""), 
+        raises (Exception, "ending must be filled"))
+
 
 def test_AddReservation():
     P = Parking()
@@ -31,7 +60,7 @@ def test_AvailabilityJustOne():
 
 def test_AvailabilityHasReservationForTomorrow():
     P = Parking()
-    otherReservation = ParkingReservation("F1234", "A1", startDateTomorrow, endDateTomorrow)
+    otherReservation = ParkingReservation.Create("F1234", "A1", startDateTomorrow, endDateTomorrow)
     P.AddReservation(otherReservation)
     assert_that(len(P.reservations), is_(1))
     assert_that(P.CountAvailableSpots(), equal_to(len(P.Spots)))
@@ -69,7 +98,7 @@ def test_ValidationAcceptDifferentPlateDifferentSpot():
     msg = P.AddReservation(firstReservation)
     assert_that(msg, is_(""))
 
-    otherReservation = ParkingReservation("F5678", "A2", startDateToday, endDateToday)
+    otherReservation = ParkingReservation.Create("F5678", "A2", startDateToday, endDateToday)
     msg = P.AddReservation(otherReservation)
     assert_that(msg, is_(""))
 
@@ -80,7 +109,7 @@ def test_ValidationReject():
     msg = P.AddReservation(firstReservation)
     assert_that(msg, is_(""))
 
-    otherReservation = ParkingReservation("F5678", "A1", startDateTodayLater, endDateTodayLater)
+    otherReservation = ParkingReservation.Create("F5678", "A1", startDateTodayLater, endDateTodayLater)
     msg = P.AddReservation(otherReservation)
     assert_that(msg, is_not(""))
     

@@ -1,3 +1,4 @@
+from ast import Try
 from datetime import datetime
 
 class ParkingReservation:
@@ -6,6 +7,23 @@ class ParkingReservation:
 		self.spot = spot
 		self.starting = starting
 		self.ending = ending
+	
+	def Create(plate, spot, starting, ending):
+		try:
+			ParkingReservation.Validate(plate, spot, starting, ending)
+			return ParkingReservation(plate, spot, starting, ending)
+		except:
+			raise
+
+	def Validate(plate, spot, starting, ending):
+		if plate == "":
+			raise Exception("plate must be filled")
+		if spot == "":
+			raise Exception("spot must be filled")
+		if starting == "":
+			raise Exception("starting must be filled")
+		if ending == "":
+			raise Exception("ending must be filled")
 
 class Parking:
 	def __init__(self):
