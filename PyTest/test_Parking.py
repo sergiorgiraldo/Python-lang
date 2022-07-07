@@ -46,11 +46,11 @@ def test_CreateReservationWithoutEnding_ThrowsException():
             with_args("F1234", "A1", startDateToday, ""), 
         raises (Exception, "ending must be filled"))
 
-
 def test_AddReservation():
     P = Parking()
     P.DBWrapper.Setup()
     P.AddReservation(firstReservation)
+    TearDown(P)
     assert_that(len(P.Reservations), is_(1))
 
 def test_AvailabilityFull():
@@ -65,6 +65,16 @@ def test_AvailabilityJustOne():
     P.AddReservation(firstReservation)
     TearDown(P)
     assert_that(P.CountAvailableSpots(), equal_to(len(P.Spots) -1))
+
+def test_SpotMustExist():
+    P = Parking()
+    P.DBWrapper.Setup()
+    otherReservation = ParkingReservation("F1234", "THIS DOES NOT EXIST", startDateTodayLater, endDateTodayLater)
+    TearDown(P)
+    assert_that(
+        calling(P.AddReservation).
+            with_args(otherReservation), 
+        raises (Exception, "spot does not exist"))
 
 def test_AvailabilityHasReservationForTomorrow():
     P = Parking()

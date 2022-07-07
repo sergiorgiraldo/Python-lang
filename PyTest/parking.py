@@ -49,7 +49,11 @@ class DBWrapper:
 
 	@db_session
 	def Save(self, ParkingReservation):
-		Spot = DBWrapper.Parking.get(spot=ParkingReservation.spot)
+		try:
+			Spot = DBWrapper.Parking.get(spot=ParkingReservation.spot)
+		except:
+			raise Exception("spot does not exist")
+
 		DBWrapper.Reservations(
 			id_spot = Spot.id_spot,
 			plate = ParkingReservation.plate,
@@ -60,9 +64,15 @@ class DBWrapper:
 	@db_session
 	def GenerateTestData():
 		DBWrapper.Parking(spot = "A1")
-		DBWrapper.Parking(spot = "B1")
 		DBWrapper.Parking(spot = "A2")
+		DBWrapper.Parking(spot = "A3")
+		DBWrapper.Parking(spot = "A4")
+		DBWrapper.Parking(spot = "A5")
+		DBWrapper.Parking(spot = "B1")
 		DBWrapper.Parking(spot = "B2")
+		DBWrapper.Parking(spot = "B3")
+		DBWrapper.Parking(spot = "B4")
+		DBWrapper.Parking(spot = "B5")
 		DBWrapper.db.commit()
 
 class Parking:
@@ -75,8 +85,8 @@ class Parking:
 		msg = Parking.Validate(self, ParkingReservation);
 
 		if (not msg):
-			self.Reservations.append(ParkingReservation)
 			self.DBWrapper.Save(ParkingReservation)
+			self.Reservations.append(ParkingReservation)
 
 		return msg 		
 
