@@ -28,7 +28,7 @@ class ParkingReservation:
 class DBWrapper:
 	db = Database()
 	
-	def Setup(self, filepath=None):
+	def Setup(filepath=None):
 		if filepath:
 			DBWrapper.db.bind(provider="sqlite", filename=filepath)
 			DBWrapper.db.generate_mapping()
@@ -48,10 +48,9 @@ class DBWrapper:
 		id_spot = Required(int)
 
 	@db_session
-	def Save(self, ParkingReservation):
-		try:
-			Spot = DBWrapper.Parking.get(spot=ParkingReservation.spot)
-		except:
+	def Save(ParkingReservation):
+		Spot = DBWrapper.Parking.get(spot=ParkingReservation.spot)
+		if Spot == None:
 			raise Exception("spot does not exist")
 
 		DBWrapper.Reservations(
@@ -75,11 +74,18 @@ class DBWrapper:
 		DBWrapper.Parking(spot = "B5")
 		DBWrapper.db.commit()
 
+	@db_session
+	def GetSpots():
+		aux = []
+		for p in select(p for p in DBWrapper.Parking):
+			aux.append(p.spot)
+		return aux
+
 class Parking:
 	def __init__(self):
-		self.Spots = ["A1", "A2", "A3", "A4", "A5","B1", "B2", "B3", "B4", "B5"] 
+		self.Spots = [] 
 		self.Reservations = []
-		self.DBWrapper = DBWrapper()
+		self.DBWrapper = DBWrapper
 
 	def AddReservation(self, ParkingReservation):
 		msg = Parking.Validate(self, ParkingReservation);
@@ -89,6 +95,11 @@ class Parking:
 			self.Reservations.append(ParkingReservation)
 
 		return msg 		
+
+	def GetSpots(self):
+		if len(self.Spots) == 0:
+			self.Spots = self.DBWrapper.GetSpots()
+		return self.Spots
 
 	def Validate(self, ParkingReservation): #dummy logic,evaluate if there is reservation for another car on the day asked, on that spot
 		msg = ""
@@ -100,7 +111,7 @@ class Parking:
 		return msg
 
 	def ListAvailableSpots(self): #dummy logic, evaluate if the reservation is on the same day
-		AvailableSpots = self.Spots.copy()
+		AvailableSpots = self.GetSpots().copy()
 		for spot in self.Spots:
 			for reservation in [R for R in self.Reservations if 
 				spot in R.spot]:

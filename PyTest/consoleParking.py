@@ -1,7 +1,18 @@
 from parking import *
 
+# P = Parking()
+# P.DBWrapper.Setup()
+# @db_session
+# def t():
+#     print(P.Spots)
+#     P.GetSpots()
+#     print(P.Spots)
+#     print(P.DBWrapper.Parking.get(spot="A1").spot)
+
+# t()
+
 P = Parking()
-P.DBWrapper.Setup("./parking.sqlite")
+P.DBWrapper.Setup("parking.sqlite")
 
 spot = input("What is the spot?")
 plate = input("What is the plate?")
