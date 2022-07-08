@@ -24,6 +24,9 @@ class ParkingReservation:
 			raise Exception("starting must be filled")
 		if ending == "":
 			raise Exception("ending must be filled")
+		Spot = DBWrapper.GetSpot(spot)
+		if Spot == None:
+			raise Exception("spot does not exist")
 
 class DBWrapper:
 	db = Database()
@@ -40,6 +43,7 @@ class DBWrapper:
 	class Parking(db.Entity):
 		id_spot = PrimaryKey(int, auto=True)
 		spot = Required(str)
+	
 	class Reservations(db.Entity):
 		id_reservation = PrimaryKey(int, auto=True)
 		plate = Required(str)
@@ -49,10 +53,7 @@ class DBWrapper:
 
 	@db_session
 	def Save(ParkingReservation):
-		Spot = DBWrapper.Parking.get(spot=ParkingReservation.spot)
-		if Spot == None:
-			raise Exception("spot does not exist")
-
+		Spot = DBWrapper.GetSpot(ParkingReservation.spot)
 		DBWrapper.Reservations(
 			id_spot = Spot.id_spot,
 			plate = ParkingReservation.plate,
@@ -74,6 +75,13 @@ class DBWrapper:
 		DBWrapper.Parking(spot = "B5")
 		DBWrapper.db.commit()
 
+	@db_session
+	def GetSpot(spotFromReservation):
+		try:
+			return DBWrapper.Parking.get(spot=spotFromReservation)
+		except:
+			return None
+			
 	@db_session
 	def GetSpots():
 		aux = []

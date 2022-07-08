@@ -12,43 +12,57 @@ tomorrow = datetime.now() + timedelta(days=1)
 startDateTomorrow = datetime(tomorrow.year, tomorrow.month, tomorrow.day, 11, 30)
 endDateTomorrow =datetime(tomorrow.year, tomorrow.month, tomorrow.day, 12, 30)
     
-firstReservation = ParkingReservation.Create("F1234", "A1", startDateToday, endDateToday)
-
 def TearDown(Parking):
     Parking.DBWrapper.db.provider = None
     Parking.DBWrapper.db.schema = None
 
 def test_CreateReservation():
+    P = Parking()
+    P.DBWrapper.Setup()
     result = ParkingReservation.Create("F1234", "A1", startDateToday, endDateToday)    
     assert_that(result, instance_of(ParkingReservation))
+    TearDown(P)
 
 def test_CreateReservationWithoutPlate_ThrowsException():
+    P = Parking()
+    P.DBWrapper.Setup()
     assert_that(
         calling(ParkingReservation.Create).
             with_args("", "A1", startDateToday, endDateToday), 
         raises (Exception, "plate must be filled"))
+    TearDown(P)
 
 def test_CreateReservationWithoutSpot_ThrowsException():
+    P = Parking()
+    P.DBWrapper.Setup()
     assert_that(
         calling(ParkingReservation.Create).
             with_args("F1234", "", startDateToday, endDateToday), 
         raises (Exception, "spot must be filled"))
+    TearDown(P)
 
 def test_CreateReservationWithoutStarting_ThrowsException():
+    P = Parking()
+    P.DBWrapper.Setup()
     assert_that(
         calling(ParkingReservation.Create).
             with_args("F1234", "A1", "", endDateToday), 
         raises (Exception, "starting must be filled"))
+    TearDown(P)
 
 def test_CreateReservationWithoutEnding_ThrowsException():
+    P = Parking()
+    P.DBWrapper.Setup()
     assert_that(
         calling(ParkingReservation.Create).
             with_args("F1234", "A1", startDateToday, ""), 
         raises (Exception, "ending must be filled"))
+    TearDown(P)
 
 def test_AddReservation():
     P = Parking()
     P.DBWrapper.Setup()
+    firstReservation = ParkingReservation.Create("F1234", "A1", startDateToday, endDateToday)
     P.AddReservation(firstReservation)
     assert_that(len(P.Reservations), is_(1))
     TearDown(P)
@@ -63,6 +77,7 @@ def test_AvailabilityFull():
 def test_AvailabilityJustOne():
     P = Parking()
     P.DBWrapper.Setup()
+    firstReservation = ParkingReservation.Create("F1234", "A1", startDateToday, endDateToday)
     P.AddReservation(firstReservation)
     assert_that(P.CountAvailableSpots(), equal_to(len(P.GetSpots()) -1))
     TearDown(P)
@@ -89,6 +104,7 @@ def test_AvailabilityHasReservationForTomorrow():
 def test_AvailabilityCheckSpot():
     P = Parking()
     P.DBWrapper.Setup()
+    firstReservation = ParkingReservation.Create("F1234", "A1", startDateToday, endDateToday)
     assert_that("A1", is_in(P.ListAvailableSpots())) 
     P.AddReservation(firstReservation)
     assert_that("A1", not is_in(P.ListAvailableSpots())) 
@@ -97,6 +113,7 @@ def test_AvailabilityCheckSpot():
 def test_ValidationAcceptSamePlateSameSpot():
     P = Parking()
     P.DBWrapper.Setup()
+    firstReservation = ParkingReservation.Create("F1234", "A1", startDateToday, endDateToday)
     msg = P.AddReservation(firstReservation)
     assert_that(msg, is_(""))
 
@@ -109,6 +126,7 @@ def test_ValidationAcceptSamePlateSameSpot():
 def test_CheckIfSpotIsAvailable_Is():
     P = Parking()
     P.DBWrapper.Setup()
+    firstReservation = ParkingReservation.Create("F1234", "A1", startDateToday, endDateToday)
     P.AddReservation(firstReservation)
     spotIsAvailable = P.CheckSpot("A1", startDateTomorrow, endDateTomorrow)
     assert_that(spotIsAvailable)
@@ -117,6 +135,7 @@ def test_CheckIfSpotIsAvailable_Is():
 def test_CheckIfSpotIsAvailable_IsNot():
     P = Parking()
     P.DBWrapper.Setup()
+    firstReservation = ParkingReservation.Create("F1234", "A1", startDateToday, endDateToday)
     P.AddReservation(firstReservation)
     spotAvailable = P.CheckSpot("A1", startDateToday, endDateToday)
     assert_that(is_not(spotAvailable))
@@ -125,6 +144,7 @@ def test_CheckIfSpotIsAvailable_IsNot():
 def test_ValidationAcceptDifferentPlateDifferentSpot():
     P = Parking()
     P.DBWrapper.Setup()
+    firstReservation = ParkingReservation.Create("F1234", "A1", startDateToday, endDateToday)
     msg = P.AddReservation(firstReservation)
     assert_that(msg, is_(""))
 
@@ -138,6 +158,7 @@ def test_ValidationAcceptDifferentPlateDifferentSpot():
 def test_ValidationReject():
     P = Parking()
     P.DBWrapper.Setup()
+    firstReservation = ParkingReservation.Create("F1234", "A1", startDateToday, endDateToday)
     msg = P.AddReservation(firstReservation)
     assert_that(msg, is_(""))
 
