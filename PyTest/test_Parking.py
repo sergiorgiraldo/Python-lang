@@ -85,10 +85,9 @@ def test_AvailabilityJustOne():
 def test_SpotMustExist():
     P = Parking()
     P.DBWrapper.Setup()
-    otherReservation = ParkingReservation("F1234", "THIS DOES NOT EXIST", startDateTodayLater, endDateTodayLater)
     assert_that(
-        calling(P.AddReservation).
-            with_args(otherReservation), 
+        calling(ParkingReservation.Create).
+            with_args("F1234", "THIS DOES NOT EXIST", startDateTodayLater, endDateTodayLater), 
         raises (Exception, "spot does not exist"))
     TearDown(P)
 

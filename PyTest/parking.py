@@ -77,10 +77,12 @@ class DBWrapper:
 
 	@db_session
 	def GetSpot(spotFromReservation):
+		Spot = None
 		try:
-			return DBWrapper.Parking.get(spot=spotFromReservation)
+			Spot = DBWrapper.Parking.get(spot=spotFromReservation)
 		except:
-			return None
+			pass
+		return Spot
 			
 	@db_session
 	def GetSpots():
