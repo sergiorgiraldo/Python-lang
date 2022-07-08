@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+    <head>
+        <title>{{ title }}</title>
+        <style>
+            *{
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>MY PARKING</h1>
+        <table>
+            <th>PLATE</th>
+            <th>SPOT</th>
+            <th>STARTING</th>
+            <th>ENDING</th>
+            {% for reservation in reservations %}
+            <tr>
+                <td>{{ reservation.plate }}</td>
+                <td>{{ reservation.spot }}</td>
+                <td>{{ reservation.starting }}</td>
+                <td>{{ reservation.ending }}</td>
+            </tr>
+            {% endfor %}        
+        </table>
+    </body>
+</html>
