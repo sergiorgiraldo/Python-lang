@@ -24,22 +24,13 @@ class ParkingReservation:
 			raise Exception("starting must be filled")
 		if ending == "":
 			raise Exception("ending must be filled")
-		Spot = DBWrapper.GetSpot(spot)
+		Spot = DBWrapper.GetSpotByName(spot)
 		if Spot == None:
 			raise Exception("spot does not exist")
 
 class DBWrapper:
 	db = Database()
 	
-	def Setup(filepath=None):
-		if filepath:
-			DBWrapper.db.bind(provider="sqlite", filename=filepath)
-			DBWrapper.db.generate_mapping()
-		else:
-			DBWrapper.db.bind(provider="sqlite", filename=":memory:", create_db=True)
-			DBWrapper.db.generate_mapping(create_tables=True)
-			DBWrapper.GenerateTestData()
-
 	class Parking(db.Entity):
 		id_spot = PrimaryKey(int, auto=True)
 		spot = Required(str)
@@ -51,9 +42,18 @@ class DBWrapper:
 		ending = Required(datetime)
 		id_spot = Required(int)
 
+	def Setup(filepath=None):
+		if filepath:
+			DBWrapper.db.bind(provider="sqlite", filename=filepath)
+			DBWrapper.db.generate_mapping()
+		else:
+			DBWrapper.db.bind(provider="sqlite", filename=":memory:", create_db=True)
+			DBWrapper.db.generate_mapping(create_tables=True)
+			DBWrapper.GenerateTestData()
+
 	@db_session
 	def Save(ParkingReservation):
-		Spot = DBWrapper.GetSpot(ParkingReservation.spot)
+		Spot = DBWrapper.GetSpotByName(ParkingReservation.spot)
 		DBWrapper.Reservations(
 			id_spot = Spot.id_spot,
 			plate = ParkingReservation.plate,
@@ -76,7 +76,7 @@ class DBWrapper:
 		DBWrapper.db.commit()
 
 	@db_session
-	def GetSpot(spotFromReservation):
+	def GetSpotByName(spotFromReservation):
 		Spot = None
 		try:
 			Spot = DBWrapper.Parking.get(spot=spotFromReservation)
@@ -85,10 +85,28 @@ class DBWrapper:
 		return Spot
 			
 	@db_session
+	def GetSpotById(spotFromReservation):
+		Spot = None
+		try:
+			Spot = DBWrapper.Parking.get(id_spot=spotFromReservation)
+		except:
+			pass
+		return Spot
+
+	@db_session
 	def GetSpots():
 		aux = []
 		for p in select(p for p in DBWrapper.Parking):
 			aux.append(p.spot)
+		return aux
+
+	@db_session
+	def GetReservations():
+		aux = []
+		for p in select(p for p in DBWrapper.Reservations):
+			Spot = DBWrapper.GetSpotById(p.id_spot)
+			R = ParkingReservation(p.plate, Spot.spot, p.starting, p.ending)
+			aux.append(R)
 		return aux
 
 class Parking:
@@ -110,6 +128,10 @@ class Parking:
 		if len(self.Spots) == 0:
 			self.Spots = self.DBWrapper.GetSpots()
 		return self.Spots
+
+	def GetReservations(self):
+		self.Reservations = self.DBWrapper.GetReservations()
+		return self.Reservations
 
 	def Validate(self, ParkingReservation): #dummy logic,evaluate if there is reservation for another car on the day asked, on that spot
 		msg = ""

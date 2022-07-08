@@ -13,7 +13,7 @@ from parking import *
 
 P = Parking()
 P.DBWrapper.Setup("parking.sqlite")
-
+P.GetReservations()
 spot = input("What is the spot?")
 plate = input("What is the plate?")
 starting = input("What is the starting (yyyymmdd hhnn)?")
