@@ -1,0 +1,19 @@
+*{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+h3{
+    color: purple;
+    font-weight: bold;
+}
+table {
+    table-layout: fixed;
+    border-collapse: collapse;
+    border:solid 1px;
+}
+th,td{
+    border:solid 1px;
+    padding:5px;
+}
+tbody tr:nth-child(odd) {
+    background-color: gainsboro;
+}

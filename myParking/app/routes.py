@@ -1,10 +1,10 @@
 from flask import render_template,flash,redirect
 from app import app
-from .parking import *
+from app.parking import *
 from app.new import NewForm
 
 P = Parking()
-P.DBWrapper.Setup("parking.sqlite")
+P.DBWrapper.Setup("./db/parking.sqlite")
 
 @app.route('/')
 @app.route('/index')
@@ -25,7 +25,7 @@ def new():
                 datetime.strptime(form.starting.data, '%Y%m%d %H%M'), 
                 datetime.strptime(form.ending.data, '%Y%m%d %H%M'))
             Msg = P.AddReservation(Reservation)
-            flash(Msg)        
+            flash(Msg if Msg != "" else "Success!")        
         except Exception as e:
             flash(str(e))
 

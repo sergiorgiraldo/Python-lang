@@ -2,15 +2,7 @@
 <html>
     <head>
         <title>{{ title }}</title>
-        <style>
-            *{
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            }
-            h3{
-                color: red;
-                font-weight: bold;
-            }
-        </style>
+        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/main.css') }}">
     </head>
     <body>
         <h1>MY PARKING</h1>
@@ -37,7 +29,7 @@
             {% endfor %}        
         </table>
         <p>
-            <button type="button" onclick="window.location.href='{{ url_for('new') }}';">New reservation</button>
+            <button type="button" onclick="javascript:document.location.href='/new'">New Reservation</button>
         </p>
     </body>
 </html>

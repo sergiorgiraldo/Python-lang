@@ -1,4 +1,4 @@
-from .parking import *
+from app.parking import *
 from datetime import datetime, timedelta
 from hamcrest import *
 import pytest
