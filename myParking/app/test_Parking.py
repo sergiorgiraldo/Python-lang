@@ -5,14 +5,18 @@ import pytest
 
 now = datetime.now()
 startDateToday = datetime(now.year, now.month, now.day, 11, 30)
-endDateToday =datetime(now.year, now.month, now.day, 12, 30)
+endDateToday = datetime(now.year, now.month, now.day, 12, 30)
 startDateTodayLater = datetime(now.year, now.month, now.day, 13, 30)
-endDateTodayLater =datetime(now.year, now.month, now.day, 14, 30)
+endDateTodayLater = datetime(now.year, now.month, now.day, 14, 30)
 
 tomorrow = datetime.now() + timedelta(days=1)
 startDateTomorrow = datetime(tomorrow.year, tomorrow.month, tomorrow.day, 11, 30)
-endDateTomorrow =datetime(tomorrow.year, tomorrow.month, tomorrow.day, 12, 30)
+endDateTomorrow = datetime(tomorrow.year, tomorrow.month, tomorrow.day, 12, 30)
     
+yesterday = datetime.now() + timedelta(days=-1)
+startDateYesterday = datetime(yesterday.year, yesterday.month, yesterday.day, 11, 30)
+endDateYesterday =datetime(yesterday.year, yesterday.month, yesterday.day, 12, 30)
+
 @pytest.fixture
 def Parking_(): 
     P = Parking()
@@ -48,6 +52,18 @@ def test_CreateReservationWithoutStarting_ThrowsException(Parking_, PrepareTest)
         calling(ParkingReservation.Create).
             with_args("F1234", "A1", "", endDateToday), 
         raises (Exception, "starting must be filled"))
+
+def test_CreateReservationStartingInThePast_ThrowsException(Parking_, PrepareTest):
+    assert_that(
+        calling(ParkingReservation.Create).
+            with_args("F1234", "A1", startDateYesterday, endDateYesterday), 
+        raises (Exception, "starting cannot be in the past"))
+
+def test_CreateReservationEndingSoonerThanStarting_ThrowsException(Parking_, PrepareTest):
+    assert_that(
+        calling(ParkingReservation.Create).
+            with_args("F1234", "A1", endDateToday, startDateToday), 
+        raises (Exception, "starting must be sooner than ending"))
 
 def test_CreateReservationWithoutEnding_ThrowsException(Parking_, PrepareTest):
     assert_that(

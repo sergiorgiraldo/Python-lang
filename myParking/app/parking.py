@@ -24,6 +24,10 @@ class ParkingReservation:
 			raise Exception("starting must be filled")
 		if ending == "":
 			raise Exception("ending must be filled")
+		if starting.date() < datetime.now().date():
+			raise Exception("starting cannot be in the past")
+		if starting > ending:
+			raise Exception("starting must be sooner than ending")
 		Spot = DBWrapper.GetSpotByName(spot)
 		if Spot == None:
 			raise Exception("spot does not exist")
