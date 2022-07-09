@@ -2,4 +2,5 @@ create table parking(id_spot integer primary key autoincrement, spot text);
 
 create table reservations(id_reservation integer primary key autoincrement, plate text, id_spot integer, starting datetime, ending datetime, foreign key (id_spot) references parking(id_spot));
 
-insert into parking (spot) select "A1" as spot union all select "A2" union all select "A3" union all select "A4" union all select "A5" union all select "B1" union all select "B2" union all select "B3" union all select "B4" union all select "B5";
+insert into parking (spot) 
+select "A1" as spot union all select "A2" union all select "A3" union all select "A4" union all select "A5" union all select "B1" union all select "B2" union all select "B3" union all select "B4" union all select "B5";
