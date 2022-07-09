@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+    <head>
+        <title>{{ title }}</title>
+        <style>
+            *{
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>MY PARKING</h1>
+        <form action="" method="post" novalidate>
+            {{ form.hidden_tag() }}
+
+            {{ form.plate.label }} {{ form.plate(size=10) }}<p/>
+            {{ form.spot.label }} {{ form.spot(size=10) }}<p/>
+            {{ form.starting.label }} {{ form.starting(size=25) }}<p/>
+            {{ form.ending.label }} {{ form.ending(size=25) }}<p/>
+            {{ form.submit() }}
+        </form>
+    </body>
+</html>

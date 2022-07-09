@@ -135,6 +135,7 @@ class Parking:
 
 	def Validate(self, ParkingReservation): #dummy logic,evaluate if there is reservation for another car on the day asked, on that spot
 		msg = ""
+		self.GetReservations()
 		for reservation in [R for R in self.Reservations if 
 				R.starting.date() == datetime.now().date() and 
 				R.spot == ParkingReservation.spot]:
@@ -144,6 +145,7 @@ class Parking:
 
 	def ListAvailableSpots(self): #dummy logic, evaluate if the reservation is on the same day
 		AvailableSpots = self.GetSpots().copy()
+		self.GetReservations()
 		for spot in self.Spots:
 			for reservation in [R for R in self.Reservations if 
 				spot in R.spot]:
@@ -156,6 +158,7 @@ class Parking:
 		return len(AvailableSpots)
 
 	def CheckSpot(self, spot, starting, ending):
+		self.GetReservations()
 		return not any(
 		    reservation.starting.date() == starting.date() or reservation.ending.date() == ending.date()
 		    for reservation in [R for R in self.Reservations if spot in R.spot])	

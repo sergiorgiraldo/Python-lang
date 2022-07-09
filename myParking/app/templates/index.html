@@ -6,10 +6,22 @@
             *{
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             }
+            h3{
+                color: red;
+                font-weight: bold;
+            }
         </style>
     </head>
     <body>
         <h1>MY PARKING</h1>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <h3>{{ message }}</h3>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
         <table>
             <th>PLATE</th>
             <th>SPOT</th>
@@ -24,5 +36,8 @@
             </tr>
             {% endfor %}        
         </table>
+        <p>
+            <button type="button" onclick="window.location.href='{{ url_for('new') }}';">New reservation</button>
+        </p>
     </body>
 </html>
