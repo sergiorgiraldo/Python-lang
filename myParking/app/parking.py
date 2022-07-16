@@ -107,8 +107,11 @@ class DBWrapper:
 	@db_session
 	def GetSpotPerDay():
 		spotPerday = {}
-		for r in select((r.starting, count()) for r in DBWrapper.Reservations):
-			spotPerday[r[0].date()] = r[1]
+		for p in select(p for p in DBWrapper.Reservations):
+			if (p.starting.date() in spotPerday):
+				spotPerday[p.starting.date()] += 1
+			else:	
+				spotPerday[p.starting.date()] = 1
 		return spotPerday
 
 	@db_session
@@ -155,10 +158,10 @@ class Parking:
 
 	def ListAvailableSpots(self): #dummy logic, evaluate if the reservation is on the same day
 		AvailableSpots = self.GetSpots().copy()
+		Reservations_ = self.GetReservations()	
 		for spot in self.Spots:
-			for reservation in [R for R in self.Reservations if 
-				spot in R.spot]:
-				if reservation.starting.date() == datetime.now().date():
+			for reservation in [R for R in Reservations_]:
+				if reservation.starting.date() == datetime.now().date() and reservation.spot == spot:
 					AvailableSpots.remove(spot)
 		return AvailableSpots
 
