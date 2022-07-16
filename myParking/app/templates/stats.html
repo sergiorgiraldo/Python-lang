@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Parking stats</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/main.css') }}">
+</head>
+<body>
+    <h2>Available today</h2>
+    <ul>
+    {% for s in spots %}
+        <li>{{ s }}</li>
+    {% endfor %} 
+    </ul>           
+
+    <h2>Occupation per day</h2>
+    <ul>
+        {% for d in spotsPerDay %}
+            <li>{{ d }}-{{spotsPerDay[d]}}</li>
+        {% endfor %} 
+        </ul>           
+    
+</body>
+</html>

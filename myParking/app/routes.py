@@ -31,3 +31,12 @@ def new():
 
         return redirect('/index')
     return render_template('new.html', title='My Parking', form=form)
+
+@app.route('/stats', methods=['GET'])
+def stats():
+    Spots = P.ListAvailableSpots()
+
+    SpotsPerDay = P.ListSpotsPerDay()
+
+    return render_template('stats.html', spots=Spots, spotsPerDay=SpotsPerDay)
+

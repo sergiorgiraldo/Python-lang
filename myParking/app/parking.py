@@ -105,6 +105,13 @@ class DBWrapper:
 		return aux
 
 	@db_session
+	def GetSpotPerDay():
+		spotPerday = {}
+		for r in select((r.starting, count()) for r in DBWrapper.Reservations):
+			spotPerday[r[0].date()] = r[1]
+		return spotPerday
+
+	@db_session
 	def GetReservations():
 		aux = []
 		for p in select(p for p in DBWrapper.Reservations):
@@ -158,6 +165,10 @@ class Parking:
 	def CountAvailableSpots(self):
 		AvailableSpots = Parking.ListAvailableSpots(self)
 		return len(AvailableSpots)
+
+	def ListSpotsPerDay(self):
+		SpotsPerDay_ = self.DBWrapper.GetSpotPerDay() 
+		return SpotsPerDay_
 
 	def CheckSpot(self, spot, starting, ending):
 		return not any(
