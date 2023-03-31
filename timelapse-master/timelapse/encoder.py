@@ -43,8 +43,9 @@ class Encoder(Thread):
         # Call ffmpeg with settings compatible with QuickTime.
         # https://superuser.com/a/820137
         command: List[str] = ["ffmpeg", "-y",
-                              "-framerate", "30",
+                              "-framerate", "2",
                               "-i", self.input,
+                              "-r", "30",
                               "-vf", "format=yuv420p",
                               "-vcodec", "h264",
                               self.output]
