@@ -45,8 +45,7 @@ class Encoder(Thread):
         command: List[str] = ["ffmpeg", "-y",
                               "-framerate", "2",
                               "-i", self.input,
-                              "-r", "30",
-                              "-vf", "format=yuv420p",
+                              "-pix_fmt", "yuv420p",
                               "-vcodec", "h264",
                               self.output]
         try:
@@ -60,5 +59,5 @@ class Encoder(Thread):
             else:
                 notify("Timelapse", f"Movie saved to `{self.output}`")
         except Exception as e:
-            print("Main exception", e)
-            notify("Timelapse Error", e)
+            print("Main exception", str(e))
+            # notify("Timelapse Error", str(e))
