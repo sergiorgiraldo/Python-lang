@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "timelapse"
+version = "1.0"
+description = "Record a timelapse video of your desktop. Native macOS screen recording app. It will be available as mov in Movies folder."
+authors = ["Sergio Giraldo <sergiorgiraldo@gmail.com>"]
+license = "Apache-2.0"
+readme = "README.md"
+repository = "https://github.com/sergiorgiraldo/python/timelapse"
+keywords = ["screen-recorder", "timelapse", "macos"]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pyobjc = "9.0.1"
+
+[tool.poetry.dev-dependencies]
+pytest = "3.9.3"
+py2app = "^0.28"
+autopep8 = "^1.5"

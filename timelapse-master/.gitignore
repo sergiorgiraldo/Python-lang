@@ -1,0 +1,8 @@
+*.pyc
+.idea
+venv
+.python-version
+dist
+.eggs
+build
+poetry.lock
