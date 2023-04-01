@@ -1,4 +1,5 @@
 import os
+import sys
 import time
 import subprocess
 from pathlib import Path
@@ -10,7 +11,13 @@ from notify import notify  # Shows notifications/alerts
 from encoder import Encoder, not_found_msg  # Creates timelapse video
 from recorder import Recorder  # Takes screenshots
 from Foundation import NSUserDefaults
+import traceback
 
+def log_except_hook(*exc_info):
+    text = "".join(traceback.format_exception(*exc_info()))
+    notify("uncaught", "Unhandled exception:" + text)
+
+sys.excepthook = log_except_hook
 
 def dark_mode() -> bool:
     return NSUserDefaults.standardUserDefaults().stringForKey_('AppleInterfaceStyle') == "Dark"
@@ -157,7 +164,10 @@ class Timelapse(NSObject):
 
 
 if __name__ == "__main__":
-    app = NSApplication.sharedApplication()
-    delegate = Timelapse.alloc().init()
-    app.setDelegate_(delegate)
-    AppHelper.runEventLoop()
+    try:
+        app = NSApplication.sharedApplication()
+        delegate = Timelapse.alloc().init()
+        app.setDelegate_(delegate)
+        AppHelper.runEventLoop()
+    except Exception as e:
+        notify("Timelapse error", "main:An unexpected error occurred:" + str(e))# handle the error

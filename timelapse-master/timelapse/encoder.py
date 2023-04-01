@@ -26,7 +26,7 @@ class Encoder(Thread):
         # Set config options
         self.input: str = f"{input_dir}/%d.png"
         timestamp: str = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
-        self.output: str = f"{output_dir}/timelapse-{timestamp}.mov"
+        self.output: str = f"{output_dir}/timelapse-{timestamp}.mp4"
 
         print("Encoder started")
 
@@ -40,17 +40,18 @@ class Encoder(Thread):
         together using `ffmpeg` to create a movie.  Each image will become
         a single frame in the movie.
         """
-        # Call ffmpeg with settings compatible with QuickTime.
-        # https://superuser.com/a/820137
         command: List[str] = ["ffmpeg", "-y",
                               "-framerate", "2",
                               "-i", self.input,
+                              "-c:v", "libx264",
+                              "-preset", "slow",
+                              "-profile:v", "high",
+                              "-level:v", "4.0",
                               "-pix_fmt", "yuv420p",
-                              "-vcodec", "h264",
+                              "-crf", "18",
                               self.output]
         try:
             notify("Timelapse", f"Creating timelapse. This might take a while")
-            print(' '.join(command))
             try:
                 completed = subprocess.run(
                     command, capture_output=True, check=True)
@@ -59,5 +60,4 @@ class Encoder(Thread):
             else:
                 notify("Timelapse", f"Movie saved to `{self.output}`")
         except Exception as e:
-            print("Main exception", str(e))
-            # notify("Timelapse Error", str(e))
+            notify("Timelapse Error", "encoder:Error:" + str(e))

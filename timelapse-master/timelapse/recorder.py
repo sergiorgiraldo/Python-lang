@@ -4,6 +4,7 @@ import datetime  # Filename
 from multiprocessing import Process, Event
 from PyObjCTools import AppHelper
 from AppKit import NSEvent, NSScreen, NSMouseInRect
+from notify import notify  # Shows notifications/alerts
 
 
 def get_screen_with_mouse_index() ->int:
@@ -13,7 +14,6 @@ def get_screen_with_mouse_index() ->int:
         if NSMouseInRect(mouseLocation, screen.frame(), False):
             return i
     return 0
-
 
 class Recorder(Process):
     """
@@ -35,24 +35,27 @@ class Recorder(Process):
 
         # Number of screenshots taken
         self.screenshot_counter: int = 0
-        print("Recorder started")
+        notify("Recorder", "Recorder started")
 
     def join(self, timeout=None) -> None:
         """ Stop recording """
         self._stop.set()
         self._stopped.wait()
-        print("Recorder stopped. Total recording time: " +
+        notify("Recorder", "Recorder stopped. Total recording time: " +
               self.get_recording_time() + ".")
         Process.join(self, timeout=timeout)
 
     def run(self) -> None:
         """ Periodically take a screenshots of the screen """
-        while not self._stop.is_set():
-            self.screenshot()
-            self._stop.wait(self.interval)
+        try:
+            while not self._stop.is_set():
+                self.screenshot()
+                self._stop.wait(self.interval)
 
-        self._stopped.set()
-
+            self._stopped.set()
+        except Exception as e:
+            notify("Timelapse error", "recorder:An unexpected error occurred:" + str(e))# handle the error
+    
     def get_recording_time(self) ->str:
         return str(self.screenshot_counter * self.interval) + " seconds"
 
