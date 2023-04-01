@@ -28,11 +28,14 @@ class Encoder(Thread):
         timestamp: str = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
         self.output: str = f"{output_dir}/timelapse-{timestamp}.mp4"
 
-        print("Encoder started")
+        notify("Encode", "Encoder started")
 
     def join(self, timeout=None) -> None:
         """ Hard shutdown """
-        Thread.join(self)
+        try:
+            Thread.join(self)
+        except Exception as e:
+            notify("Timelapse error", "thread join:An unexpected error occurred:" + str(e)) # handle the error
 
     def run(self) -> None:
         """
@@ -60,4 +63,4 @@ class Encoder(Thread):
             else:
                 notify("Timelapse", f"Movie saved to `{self.output}`")
         except Exception as e:
-            notify("Timelapse Error", "encoder:Error:" + str(e))
+            notify("Timelapse Error", "encoderRun:Error:" + str(e))

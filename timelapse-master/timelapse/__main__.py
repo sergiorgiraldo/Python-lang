@@ -113,20 +113,23 @@ class Timelapse(NSObject):
         return menu
 
     def startStopRecording_(self, notification) -> None:
-        if self.recording:
-            self.recorder.join(timeout=screenshot_interval*2)
-            # Create timelapse after recording?
-            if encode:
-                self.encoder = Encoder(
-                    self.image_dir, self.encoder_output_basedir)
-                self.encoder.start()
-        else:
-            self.image_dir: str = self.create_dir(self.recorder_output_basedir)
-            self.recorder = Recorder(self.image_dir, screenshot_interval)
-            self.recorder.start()
-            notify("Timelapse started", "The recording has started")
-        self.recording: bool = not self.recording
-        self.setStatus()
+        try:
+            if self.recording:
+                self.recorder.join(timeout=screenshot_interval*2)
+                # Create timelapse after recording?
+                if encode:
+                    self.encoder = Encoder(
+                        self.image_dir, self.encoder_output_basedir)
+                    self.encoder.start()
+            else:
+                self.image_dir: str = self.create_dir(self.recorder_output_basedir)
+                self.recorder = Recorder(self.image_dir, screenshot_interval)
+                self.recorder.start()
+                notify("Timelapse started", "The recording has started")
+            self.recording: bool = not self.recording
+            self.setStatus()
+        except Exception as e:
+            notify("Timelapse error", "startStopRecording:An unexpected error occurred:" + str(e))# handle the error
 
     @objc.python_method
     def create_dir(self, base_dir: str) -> str:
