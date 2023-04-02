@@ -1,0 +1,51 @@
+"signatures":
+  "get_nth_fibonacci_number-1-0-int": |-
+    import inspect
+    import sys
+
+    # Extract function name and arguments
+    function_name = '<<function_name>>'
+    args = <<args_in>>
+    kwargs = <<kwargs_in>>
+
+    # Get the function object
+    try:
+        function = globals()[function_name]
+    except KeyError:
+        raise Exception(f"Function '{function_name}' not found")
+
+    # Get the function signature
+    signature = inspect.signature(function)
+
+    # Check if the arguments are valid
+    try:
+        bound_arguments = signature.bind(*args, **kwargs)
+    except TypeError as e:
+        raise Exception(str(e))
+
+    # Get the dependencies used in the function body
+    dependencies = set()
+    for line in inspect.getsourcelines(function)[0]:
+        if "import" in line:
+            dependencies.add(line.split()[1])
+
+    # Check if all the dependencies are installed
+    installed_modules = set(sys.modules.keys())
+    if not dependencies.issubset(installed_modules):
+        raise Exception(f"Missing dependencies: {dependencies - installed_modules}")
+
+    # Generate the code
+    code = f"import sys\n"
+    for dependency in dependencies:
+        code += f"import {dependency}\n"
+    code += f"result = {function_name}("
+    for arg_name, arg_value in bound_arguments.arguments.items():
+        code += f"{arg_name}={repr(arg_value)}"
+        if arg_name != list(bound_arguments.arguments.keys())[-1]:
+            code += ", "
+    code += ")\n"
+
+    # Execute the code and return the result
+    ldict = {}
+    exec(code, globals(), ldict)
+    result = ldict['result']
