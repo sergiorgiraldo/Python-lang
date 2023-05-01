@@ -2,3 +2,6 @@ __pycache__/
 *.wav
 _temp/
 models/
+build
+dist
+.ipynb_checkpoints
