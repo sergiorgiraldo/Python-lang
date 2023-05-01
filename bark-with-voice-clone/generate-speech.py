@@ -3,7 +3,7 @@ from transformers import BertTokenizer
 from bark.generation import SAMPLE_RATE, preload_models, codec_decode, generate_coarse, generate_fine, generate_text_semantic
 
 # Enter your prompt and speaker here
-text_prompt = "Ola, Sou o Sergio. Meu time sempre foi o Palmeiras, eu vivi na Holanda e pizza fria permanece meu prato preferido [risos]"
+text_prompt = "Oi, Sou o Carlos. Meu time sempre foi o Palmeiras, eu vivo na Holanda e pizza fria permanece meu prato preferido [risos]"
 voice_name = "srg" # use your custom voice name here if you have one
 
 # load the tokenizer
@@ -23,11 +23,30 @@ preload_models(
 )
 
 # simple generation
-audio_array = generate_audio(text_prompt, history_prompt=voice_name, text_temp=0.7, waveform_temp=0.7)
+# audio_array = generate_audio(text_prompt, history_prompt=voice_name, text_temp=0.7, waveform_temp=0.7)
 
-from IPython.display import Audio
-# play audio
-Audio(audio_array, rate=SAMPLE_RATE)
+# generation with more control
+x_semantic = generate_text_semantic(
+    text_prompt,
+    history_prompt=voice_name,
+    temp=0.7,
+    top_k=50,
+    top_p=0.95,
+)
+
+x_coarse_gen = generate_coarse(
+    x_semantic,
+    history_prompt=voice_name,
+    temp=0.7,
+    top_k=50,
+    top_p=0.95,
+)
+x_fine_gen = generate_fine(
+    x_coarse_gen,
+    history_prompt=voice_name,
+    temp=0.5,
+)
+audio_array = codec_decode(x_fine_gen)
 
 from scipy.io.wavfile import write as write_wav
 # save audio
