@@ -1,0 +1,95 @@
+{
+	"info": {
+		"_postman_id": "73a8b40f-5c49-4519-ae12-d4c29cf409a5",
+		"name": "Review-Users",
+		"description": "We are maintaining users in db. Per ING policy, these users must be reviewed every quarter.  \nWith this API, a user or their line manager acknowledge they must be kept in the database or mark the user for deletion.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34211735"
+	},
+	"item": [
+		{
+			"name": "ReviewUser",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user\":\"gk47lx\",\n    \"auth-key\":\"foo\",\n    \"status\": \"y\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3000/user_review",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"user_review"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateCycle",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"cycle\":\"202408\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3000/create_review_cycle",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"create_review_cycle"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "HandleReviews",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:3000/handle_reviews",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"handle_reviews"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

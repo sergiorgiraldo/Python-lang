@@ -1,0 +1,10 @@
+insert into tbl_user_list (user_corp_key, is_Active) values ('AAA001', true);
+insert into tbl_user_list (user_corp_key, is_Active) values ('AAA002', true);
+insert into tbl_user_list (user_corp_key, is_Active) values ('AAA003', true);
+insert into tbl_user_list (user_corp_key, is_Active) values ('AAA004', true);
+insert into tbl_user_list (user_corp_key, is_Active) values ('AAA005', true);
+insert into tbl_user_list (user_corp_key, is_Active) values ('AAA006', true);
+insert into tbl_user_list (user_corp_key, is_Active) values ('AAA007', true);
+insert into tbl_user_list (user_corp_key, is_Active) values ('AAA008', true);
+insert into tbl_user_list (user_corp_key, is_Active) values ('AAA009', true);
+insert into tbl_user_list (user_corp_key, is_Active) values ('AAA010', true);
