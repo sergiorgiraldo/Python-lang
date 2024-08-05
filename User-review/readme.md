@@ -7,9 +7,7 @@
 - pip install Flask-Testing
 
 ## API
-- navigate to `src`
-- run `python -m tests`
+- run `flask --app flaskr run`
 
 ## TESTS
-- navigate to `src`
-- run `python -m tests`
+- run `pytest`

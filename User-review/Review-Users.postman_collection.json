@@ -22,7 +22,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://127.0.0.1:3000/user_review",
+					"raw": "http://127.0.0.1:5000/user_review",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -30,7 +30,7 @@
 						"0",
 						"1"
 					],
-					"port": "3000",
+					"port": "5000",
 					"path": [
 						"user_review"
 					]
@@ -53,7 +53,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://127.0.0.1:3000/create_review_cycle",
+					"raw": "http://127.0.0.1:5000/create_review_cycle",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -61,7 +61,7 @@
 						"0",
 						"1"
 					],
-					"port": "3000",
+					"port": "5000",
 					"path": [
 						"create_review_cycle"
 					]
@@ -75,7 +75,7 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "http://127.0.0.1:3000/handle_reviews",
+					"raw": "http://127.0.0.1:5000/handle_reviews",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -83,7 +83,7 @@
 						"0",
 						"1"
 					],
-					"port": "3000",
+					"port": "5000",
 					"path": [
 						"handle_reviews"
 					]
