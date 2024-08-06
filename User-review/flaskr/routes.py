@@ -144,8 +144,6 @@ def create_review_cycle():
         return jsonify({"error": str(e)}), 500
 
 # TODO: SCHEDULE TO RUN DAILY
-
-
 @bp.route('/handle_reviews', methods=['POST'])
 def handle_reviews():
     try:
