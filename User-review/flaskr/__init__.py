@@ -1,14 +1,12 @@
 from flask import Flask
-from flask import Blueprint
 
-def create_app(test_config=None):
+def create_app(is_testing=False):
     app = Flask(__name__, instance_relative_config=True)
-
+    app.testing = is_testing
     @app.route("/hello")
     def hello():
-        return "Hello, World!"
+        return "hello world, john doe"
     
     from . import routes
     app.register_blueprint(routes.bp)
-
     return app

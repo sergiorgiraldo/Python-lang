@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, Blueprint
+from flask import current_app, request, jsonify, Blueprint
 from storm.locals import *
 from datetime import datetime, timedelta
 import uuid
@@ -113,7 +113,7 @@ def user_review():
         return jsonify({"error": "Invalid status, should be y or n"}), 400
 
     try:
-        r = Reviews()
+        r = Reviews(current_app.testing)
 
         r.review_user(data['user'], data['auth-key'], data['status'])
 
@@ -131,7 +131,7 @@ def create_review_cycle():
         return jsonify({"error": "Missing 'cycle' field"}), 400
 
     try:
-        r = Reviews()
+        r = Reviews(current_app.testing)
 
         r.add_reviewCycle(data['cycle'])
 
@@ -149,7 +149,7 @@ def create_review_cycle():
 @bp.route('/handle_reviews', methods=['POST'])
 def handle_reviews():
     try:
-        r = Reviews()
+        r = Reviews(current_app.testing)
 
         r.handle_active_review()
 

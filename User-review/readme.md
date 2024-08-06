@@ -10,4 +10,4 @@
 - run `flask --app flaskr run`
 
 ## TESTS
-- run `pytest`
+- run `pytest -v --no-header`
