@@ -52,6 +52,7 @@ def test_create_reviews_for_active_users_one_inactive():
     
     assert_that(objs).is_not_none()
     assert_that(objs.count()).is_equal_to(9)
+    assert_that("AAA001").is_not_in([obj.user_corp_key for obj in objs])
     for i in range(0, 9):
         assert_that(objs[i].review_cycle).is_equal_to("test")
         assert_that(objs[i].date_sent).is_equal_to(datetime.now().date())
