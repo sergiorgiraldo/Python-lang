@@ -9,4 +9,8 @@ def create_app(is_testing=False):
     
     from . import routes
     app.register_blueprint(routes.bp)
+
+    from . import db
+    db.init_app(app)
+
     return app
