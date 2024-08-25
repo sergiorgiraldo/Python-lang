@@ -12,7 +12,7 @@ def close_db(e=None):
     db = g.pop("db", None)
 
     if db is not None:
-        db.close()
+        db = None
         
 def connect_to_database():
     if testing:
@@ -20,19 +20,19 @@ def connect_to_database():
         store = Store(db)
         # note: this is being executed only through the unit tests and the unit tests
         # position itself in the root folder (see the sys.path in the top of the file)
-        # that's why I use the path as ./
-        with open('./ddl/tbl-user-review-cycle.sql', 'r') as f:
-            store.execute(f.read() + ';')
-        with open('./ddl/tbl-user-list.sql', 'r') as f:
-            store.execute(f.read() + ';')
-        with open('./ddl/tbl-user-review.sql', 'r') as f:
-            store.execute(f.read() + ';')
-        with open('./ddl/insert-users.sql', 'r') as f:
+        # that"s why I use the path as ./
+        with open("./ddl/tbl-user-review-cycle.sql", "r") as f:
+            store.execute(f.read() + ";")
+        with open("./ddl/tbl-user-list.sql", "r") as f:
+            store.execute(f.read() + ";")
+        with open("./ddl/tbl-user-review.sql", "r") as f:
+            store.execute(f.read() + ";")
+        with open("./ddl/insert-users.sql", "r") as f:
             for line in f:
                 store.execute(line)
         store.commit()
     else:
-        db = create_database("postgres://GK47LX@localhost:5432/postgres")
+        db = create_database("postgres://GK47LX@localhost:5432/mine")
         store = Store(db)
 
     g.db = db

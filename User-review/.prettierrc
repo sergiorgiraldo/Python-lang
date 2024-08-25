@@ -1,0 +1,17 @@
+{
+	"trailingComma": "none",
+	"tabWidth": 4,
+	"semi": true,
+	"singleQuote": false,
+	"useTabs": true,
+	"arrowParens": "always",
+	"bracketSameLine": true,
+	"overrides": [
+		{
+			"files": "*.svelte",
+			"options": {
+				"parser": "babel-flow"
+			}
+		}
+	]
+}

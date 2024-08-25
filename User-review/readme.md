@@ -2,12 +2,14 @@
 
 ## Dependencies
 
-- pip install storm
-- pip install flask
-- pip install Flask-Testing
+-   pip install storm
+-   pip install flask
+-   pip install Flask-Testing
 
 ## API
-- run `flask --app flaskr run`
+
+-   run `flask --app flaskr run`
 
 ## TESTS
-- run `pytest -v --no-header`
+
+-   run `pytest -v --no-header`

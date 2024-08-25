@@ -88,6 +88,5 @@ def test_hello(client):
     assert_that(response.data.decode("utf-8")).contains("john doe")
 
 def test_create_review_api(client):
-    response = client.put("/create_review_cycle", 
-                          json={"cycle": "202506"})
+    response = client.put("/create_review_cycle", json={"cycle": "202506"})
     assert_that(response.status_code).is_equal_to(201)

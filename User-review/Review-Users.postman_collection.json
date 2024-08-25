@@ -24,16 +24,9 @@
 				"url": {
 					"raw": "http://127.0.0.1:5000/user_review",
 					"protocol": "http",
-					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
-					],
+					"host": ["127", "0", "0", "1"],
 					"port": "5000",
-					"path": [
-						"user_review"
-					]
+					"path": ["user_review"]
 				}
 			},
 			"response": []
@@ -55,16 +48,9 @@
 				"url": {
 					"raw": "http://127.0.0.1:5000/create_review_cycle",
 					"protocol": "http",
-					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
-					],
+					"host": ["127", "0", "0", "1"],
 					"port": "5000",
-					"path": [
-						"create_review_cycle"
-					]
+					"path": ["create_review_cycle"]
 				}
 			},
 			"response": []
@@ -77,16 +63,9 @@
 				"url": {
 					"raw": "http://127.0.0.1:5000/handle_reviews",
 					"protocol": "http",
-					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
-					],
+					"host": ["127", "0", "0", "1"],
 					"port": "5000",
-					"path": [
-						"handle_reviews"
-					]
+					"path": ["handle_reviews"]
 				}
 			},
 			"response": []

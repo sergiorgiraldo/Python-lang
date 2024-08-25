@@ -6,21 +6,21 @@ import uuid
 bp = Blueprint("routes", __name__, url_prefix="/")
 
 class UserList(object):
-    __storm_table__ = 'tbl_user_list'
+    __storm_table__ = "tbl_user_list"
     __storm_primary__ = "user_corp_key"
     user_corp_key = Unicode()
     is_active = Bool()
 
 
 class ReviewCycle(object):
-    __storm_table__ = 'tbl_user_review_cycle'
+    __storm_table__ = "tbl_user_review_cycle"
     __storm_primary__ = "review_cycle"
     review_cycle = Unicode()
     is_active = Bool()
 
 
 class UserReview(object):
-    __storm_table__ = 'tbl_user_review'
+    __storm_table__ = "tbl_user_review"
     __storm_primary__ = "user_corp_key", "review_cycle"
     user_corp_key = Unicode()
     review_cycle = Unicode()
@@ -43,19 +43,19 @@ class Reviews:
             self.store = Store(db)
             # note: this is being executed only through the unit tests and the unit tests
             # position itself in the root folder (see the sys.path in the top of the file)
-            # that's why I use the path as ./
-            with open('./ddl/tbl-user-review-cycle.sql', 'r') as f:
-                self.store.execute(f.read() + ';')
-            with open('./ddl/tbl-user-list.sql', 'r') as f:
-                self.store.execute(f.read() + ';')
-            with open('./ddl/tbl-user-review.sql', 'r') as f:
-                self.store.execute(f.read() + ';')
-            with open('./ddl/insert-users.sql', 'r') as f:
+            # that"s why I use the path as ./
+            with open("./ddl/tbl-user-review-cycle.sql", "r") as f:
+                self.store.execute(f.read() + ";")
+            with open("./ddl/tbl-user-list.sql", "r") as f:
+                self.store.execute(f.read() + ";")
+            with open("./ddl/tbl-user-review.sql", "r") as f:
+                self.store.execute(f.read() + ";")
+            with open("./ddl/insert-users.sql", "r") as f:
                 for line in f:
                     self.store.execute(line)
             self.store.commit()
         else:
-            db = create_database("postgres://GK47LX@localhost:5432/postgres")
+            db = create_database("postgres://GK47LX@localhost:5432/mine")
             self.store = Store(db)
 
     def add_reviewCycle(self, cycle):
@@ -85,7 +85,7 @@ class Reviews:
         self.store.find(UserReview, UserReview.user_corp_key == user, UserReview.auth_key == auth_key).set(
             status=status, date_received=datetime.now())
 
-        if status in ['n']:
+        if status in ["n"]:
             self.store.find(UserList, UserList.user_corp_key ==
                             user).set(is_active=False)
 
@@ -103,19 +103,19 @@ class Reviews:
                         is_active=False)
         self.store.commit()
 
-@bp.route('/user_review', methods=['POST'])
+@bp.route("/user_review", methods=["POST"])
 def user_review():
     data = request.json
-    if not all(key in data for key in ['user', 'auth-key', 'status']):
+    if not all(key in data for key in ["user", "auth-key", "status"]):
         return jsonify({"error": "Missing required fields"}), 400
 
-    if data['status'] not in ['y', 'n']:
+    if data["status"] not in ["y", "n"]:
         return jsonify({"error": "Invalid status, should be y or n"}), 400
 
     try:
         r = Reviews(current_app.testing)
 
-        r.review_user(data['user'], data['auth-key'], data['status'])
+        r.review_user(data["user"], data["auth-key"], data["status"])
 
         return jsonify({"message": "Review submitted successfully"}), 201
     except Exception as e:
@@ -124,27 +124,27 @@ def user_review():
 # TODO: SEND EMAIL TO USERS AND LINE MANAGERS
 
 
-@bp.route('/create_review_cycle', methods=['PUT'])
+@bp.route("/create_review_cycle", methods=["PUT"])
 def create_review_cycle():
     data = request.json
-    if 'cycle' not in data:
-        return jsonify({"error": "Missing 'cycle' field"}), 400
+    if "cycle" not in data:
+        return jsonify({"error": "Missing "cycle" field"}), 400
 
     try:
         r = Reviews(current_app.testing)
 
-        r.add_reviewCycle(data['cycle'])
+        r.add_reviewCycle(data["cycle"])
 
-        r.deactivate_others(data['cycle'])
+        r.deactivate_others(data["cycle"])
 
-        r.create_reviews_for_active_users(data['cycle'])
+        r.create_reviews_for_active_users(data["cycle"])
 
         return jsonify({"message": "Review cycle created successfully"}), 201
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 # TODO: SCHEDULE TO RUN DAILY
-@bp.route('/handle_reviews', methods=['POST'])
+@bp.route("/handle_reviews", methods=["POST"])
 def handle_reviews():
     try:
         r = Reviews(current_app.testing)

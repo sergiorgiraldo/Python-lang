@@ -11,6 +11,7 @@ def create_app(is_testing=False):
     app.register_blueprint(routes.bp)
 
     from . import db
-    db.init_app(app)
+    with app.app_context():
+        db.init_app(app)
 
     return app
