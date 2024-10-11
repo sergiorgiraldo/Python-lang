@@ -13,7 +13,7 @@ def close_db(e=None):
 
     if db is not None:
         db = None
-        
+
 def connect_to_database():
     if testing:
         db = create_database("sqlite:")
