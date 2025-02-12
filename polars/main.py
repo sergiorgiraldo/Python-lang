@@ -95,7 +95,7 @@ print(train_pd[nums].agg(['min']))
 print("pandas "+str((time.time() - start_time)))
 
 start_time = time.time()
-print(train_pl.select(pl.min(nums)))
+print(train_pl.select(nums).min())
 print("polars "+str((time.time() - start_time)))
 
 print("\n# Comparing Median calculation time taken- many columns at once¶")
@@ -105,7 +105,7 @@ print(train_pd[nums].agg(['median']))
 print("pandas "+str((time.time() - start_time)))
 
 start_time = time.time()
-print(train_pl.select(pl.median(nums)))
+print(train_pl.select(nums).median())
 print("polars "+str((time.time() - start_time)))
 
 print("\n# Comparing Mean calculation time taken- many columns at once¶")
@@ -115,7 +115,7 @@ print(train_pd[nums].agg(['mean']))
 print("pandas "+str((time.time() - start_time)))
 
 start_time = time.time()
-print(train_pl.select(pl.mean(nums)))
+print(train_pl.select(nums).mean())
 print("polars "+str((time.time() - start_time)))
 
 print("\n# Comparing Std calculation time taken- many columns at once¶")
@@ -125,8 +125,7 @@ print(train_pd[nums].agg(['std']))
 print("pandas "+str((time.time() - start_time)))
 
 start_time = time.time()
-t=train_pl.select(pl.std(nums))
-print(t)
+print(train_pl.select(nums).std())
 print("polars "+str((time.time() - start_time)))
 
 print("\n# Comparing Nunique calculation time taken- many columns at once¶")
