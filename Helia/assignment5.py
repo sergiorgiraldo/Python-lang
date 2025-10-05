@@ -58,7 +58,7 @@ class YearlyBudget(Budget):
         print("-" * 65)
 
         for e in self.expenses:
-            print(f"{e['category']:<15}${e['cost']:<9.2f}")
+            print(f"{e['category']:<15}${e['cost']:<9.2f}") #notice inside the formatted string you need to use single quotes
         print("-" * 65)
 
 if __name__ == "__main__":
