@@ -2,6 +2,7 @@ import z3
 from itertools import combinations
 
 def solve_paired_operations(output_numbers, known_slots=None):
+    #puzzles can be 4,6,8
     how_many = len(output_numbers)
 
     solver = z3.Optimize()
@@ -9,8 +10,8 @@ def solve_paired_operations(output_numbers, known_slots=None):
     slots = [z3.Int(f"slot_{i}") for i in range(how_many)]
     
     if known_slots:
-        for idx, val in known_slots.items():
-            solver.add(slots[idx] == val)
+        for i, val in known_slots.items():
+            solver.add(slots[i] == val)
     
     # Slots in increasing order
     for i in range(how_many - 1):
@@ -26,6 +27,7 @@ def solve_paired_operations(output_numbers, known_slots=None):
     # Select exactly 4 pairs
     selected_pairs = [z3.Int(f"pair_{i}") for i in range(how_many // 2)]
     
+    # Must use all slots
     for pair in selected_pairs:
         solver.add(pair >= 0, pair < len(all_pairs))
     solver.add(z3.Distinct(selected_pairs))
