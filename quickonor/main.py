@@ -1,48 +1,49 @@
-import z3
 from itertools import combinations
+import z3
+
 
 def solve_paired_operations(output_numbers, known_slots=None):
-    #puzzles can be 4,6,8
+    # puzzles can be 4,6,8
     how_many = len(output_numbers)
 
     solver = z3.Optimize()
-    
+
     slots = [z3.Int(f"slot_{i}") for i in range(how_many)]
-    
+
     if known_slots:
         for i, val in known_slots.items():
             solver.add(slots[i] == val)
-    
+
     # Slots in increasing order
     for i in range(how_many - 1):
         solver.add(slots[i] <= slots[i+1])
-    
+
     # Reasonable bounds
     for slot in slots:
         solver.add(slot >= 1, slot <= max(output_numbers))
-    
+
     # All possible pairs
     all_pairs = list(combinations(range(how_many), 2))
-    
+
     # Select exactly 4 pairs
     selected_pairs = [z3.Int(f"pair_{i}") for i in range(how_many // 2)]
-    
+
     # Must use all slots
     for pair in selected_pairs:
         solver.add(pair >= 0, pair < len(all_pairs))
     solver.add(z3.Distinct(selected_pairs))
-    
+
     # For each of the pairs, assign which outputs they produce (add and mul)
     output_assignment = [z3.Int(f"output_{i}") for i in range(how_many)]
     solver.add(z3.Distinct(output_assignment))
     for output in output_assignment:
         solver.add(output >= 0, output < how_many)
-    
+
     # Match operations to outputs
     for pair_idx in range(how_many // 2):
         add_out_idx_var = output_assignment[pair_idx * 2]
         mul_out_idx_var = output_assignment[pair_idx * 2 + 1]
-        
+
         # For each possible pair selection, add constraints
         for possible_pair_idx, (i, j) in enumerate(all_pairs):
             # For each possible output assignment
@@ -60,17 +61,19 @@ def solve_paired_operations(output_numbers, known_slots=None):
                                 slots[i] * slots[j] == output_numbers[mul_out]
                             )
                         ))
-    
+
     # Solve
     if solver.check() == z3.sat:
-        m = solver.model()
-        
-        slot_values = [m.evaluate(slots[i]).as_long() for i in range(how_many)]        
-        selected_pair_indices = [m.evaluate(selected_pairs[i]).as_long() for i in range(how_many // 2)]
-        used_pairs = [all_pairs[idx] for idx in selected_pair_indices]
-        
-        out_assign = [m.evaluate(output_assignment[i]).as_long() for i in range(how_many)]
-        
+        model = solver.model()
+        slot_values             = [model.evaluate(slots[i]).as_long() 
+                                    for i in range(how_many)]
+        selected_pair_indices   = [model.evaluate(selected_pairs[i]).as_long() 
+                                    for i in range(how_many // 2)]
+        used_pairs              = [all_pairs[i] 
+                                    for i in selected_pair_indices]
+        out_assign              = [model.evaluate(output_assignment[i]).as_long()
+                                    for i in range(how_many)]
+
         result = {
             "slots": slot_values,
             "pairs": []
@@ -80,7 +83,7 @@ def solve_paired_operations(output_numbers, known_slots=None):
             i, j = used_pairs[pair_idx]
             add_out = out_assign[pair_idx * 2]
             mul_out = out_assign[pair_idx * 2 + 1]
-            
+
             result["pairs"].append({
                 "slot_indices": (i, j),
                 "slot_values": (slot_values[i], slot_values[j]),
@@ -95,33 +98,34 @@ def solve_paired_operations(output_numbers, known_slots=None):
                     "output_index": mul_out
                 }
             })
-        
+
         return result
     else:
         return None
 
 
-# Example usage
 if __name__ == "__main__":
-    outputs = [24,108,187,140,39,28]    
-    known   = {3: 17} 
-    
+    outputs = [24, 108, 187, 140, 39, 28]
+    known = {3: 17}
+
     print("Solving for outputs:", outputs)
     print("Known slots:", known if known else "None")
     print()
-    
+
     solution = solve_paired_operations(outputs, known)
-    
+
     if solution:
         print('Solution found!')
         print(f'\nInput slots: {solution["slots"]}')
         print('\nPairs and operations:')
-        
+
         for idx, pair in enumerate(solution["pairs"], 1):
             si, sj = pair["slot_indices"]
             vi, vj = pair["slot_values"]
             print(f'\nPair {idx}: slots[{si}]={vi}, slots[{sj}]={vj}')
-            print(f'  Add: {vi} + {vj} = {pair["add"]["result"]} → output[{pair["add"]["output_index"]}] = {pair["add"]["target"]}')
-            print(f'  Mul: {vi} × {vj} = {pair["multiply"]["result"]} → output[{pair["multiply"]["output_index"]}] = {pair["multiply"]["target"]}')
+            print(
+                f'  Add: {vi} + {vj} = {pair["add"]["result"]} → output[{pair["add"]["output_index"]}] = {pair["add"]["target"]}')
+            print(
+                f'  Mul: {vi} × {vj} = {pair["multiply"]["result"]} → output[{pair["multiply"]["output_index"]}] = {pair["multiply"]["target"]}')
     else:
         print("No solution found!")
