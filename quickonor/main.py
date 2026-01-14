@@ -116,15 +116,12 @@ if __name__ == "__main__":
     if solution:
         print('Solution found!')
         print(f'\nInput slots: {solution["slots"]}')
-        print('\nPairs and operations:')
-
         for idx, pair in enumerate(solution["pairs"], 1):
             si, sj = pair["slot_indices"]
             vi, vj = pair["slot_values"]
-            print(f'\nPair {idx}: slots[{si}]={vi}, slots[{sj}]={vj}')
-            print(
-                f'  Add: {vi} + {vj} = {pair["add"]["result"]} → output[{pair["add"]["output_index"]}] = {pair["add"]["target"]}')
-            print(
-                f'  Mul: {vi} × {vj} = {pair["multiply"]["result"]} → output[{pair["multiply"]["output_index"]}] = {pair["multiply"]["target"]}')
+            print(f'\nPair {idx}')
+            print(f'\tslots[{si}]={vi}, slots[{sj}]={vj}')
+            print(f'\tAdd: {vi} + {vj} = {pair["add"]["result"]} → output[{pair["add"]["output_index"]}] = {pair["add"]["target"]}')
+            print(f'\tMul: {vi} × {vj} = {pair["multiply"]["result"]} → output[{pair["multiply"]["output_index"]}] = {pair["multiply"]["target"]}')
     else:
         print("No solution found!")
