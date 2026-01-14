@@ -78,7 +78,6 @@ def solve_paired_operations(output_numbers, known_slots=None):
             "slots": slot_values,
             "pairs": []
         }
-
         for pair_idx in range(how_many // 2):
             i, j = used_pairs[pair_idx]
             add_out = out_assign[pair_idx * 2]
@@ -105,8 +104,8 @@ def solve_paired_operations(output_numbers, known_slots=None):
 
 
 if __name__ == "__main__":
-    outputs = [24, 108, 187, 140, 39, 28]
-    known = {3: 17}
+    outputs = [40,56,64,104,300,399,400, 495]
+    known = {2: 7, 6: 57}
 
     print("Solving for outputs:", outputs)
     print("Known slots:", known if known else "None")
