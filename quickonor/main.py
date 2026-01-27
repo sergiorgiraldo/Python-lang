@@ -104,8 +104,8 @@ def solve_paired_operations(output_numbers, known_slots=None):
 
 
 if __name__ == "__main__":
-    outputs = [40,56,64,104,300,399,400, 495]
-    known = {2: 7, 6: 57}
+    outputs = [38,39,42,43,48,280,380,432]
+    known = {1: 10}
 
     print("Solving for outputs:", outputs)
     print("Known slots:", known if known else "None")
