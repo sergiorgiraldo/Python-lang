@@ -104,8 +104,9 @@ def solve_paired_operations(output_numbers, known_slots=None):
 
 
 if __name__ == "__main__":
-    outputs = [38,39,42,43,48,280,380,432]
-    known = {1: 10}
+    outputs = [37, 40,41,56,144,300,330,423]
+    known = {5: 30}
+    numbers = []
 
     print("Solving for outputs:", outputs)
     print("Known slots:", known if known else "None")
@@ -123,5 +124,11 @@ if __name__ == "__main__":
             print(f'\tslots[{si}]={vi}, slots[{sj}]={vj}')
             print(f'\tAdd: {vi} + {vj} = {pair["add"]["result"]} → output[{pair["add"]["output_index"]}] = {pair["add"]["target"]}')
             print(f'\tMul: {vi} × {vj} = {pair["multiply"]["result"]} → output[{pair["multiply"]["output_index"]}] = {pair["multiply"]["target"]}')
+            numbers.append(vi)
+            numbers.append(vj)
+    
+        numbers.sort()
+        print()
+        print("Solution:", numbers)
     else:
         print("No solution found!")
