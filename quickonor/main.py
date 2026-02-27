@@ -105,7 +105,7 @@ def solve_paired_operations(output_numbers, known_slots=None):
 
 if __name__ == "__main__":
     outputs = [37, 40,41,56,144,300,330,423]
-    known = {5: 30}
+    known = {5: 30} #start in 0
     numbers = []
 
     print("Solving for outputs:", outputs)
