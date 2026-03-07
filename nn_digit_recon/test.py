@@ -1,10 +1,8 @@
 import numpy as np
-from network import Network
 import mnist
 import pickle
 import function
 import cv2
-import warnings
 
 # load data
 num_classes = 10
@@ -12,22 +10,16 @@ test_images = mnist.test_images()
 test_labels = mnist.test_labels()
 
 print("Training...")
+print("Hit ESC to stop.")
 
 # data processing
 X_test = test_images.reshape(test_images.shape[0], test_images.shape[1]*test_images.shape[2]).astype('float32') #flatten 28x28 to 784x1 vectors, [60000, 784]
 x_test = X_test / 255 #normalization
 y_test = test_labels
 
-# Load with the warning (one last time)
-with warnings.catch_warnings():
-    warnings.simplefilter("ignore")
-    with open('weights.pkl', 'rb') as handle:
-        b = pickle.load(handle, encoding='latin1')
+with open('weights.pkl', 'rb') as handle:
+    b = pickle.load(handle, encoding='latin1')
 
-# Re-save with current NumPy format (fixes the warning permanently)
-with open('weights.pkl', 'wb') as handle:
-    pickle.dump(b, handle, protocol=pickle.HIGHEST_PROTOCOL)
-    
 weight1 = b[0]
 bias1 = b[1]
 weight2 = b[2]
