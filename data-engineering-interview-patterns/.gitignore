@@ -1,0 +1,167 @@
+# =============================================================================
+# Python
+# =============================================================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+*.egg
+dist/
+build/
+eggs/
+*.manifest
+*.spec
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# Testing and coverage
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Type checking
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pytype/
+.pyre/
+
+# Distribution
+*.tar.gz
+*.whl
+
+# Jupyter
+.ipynb_checkpoints/
+
+# =============================================================================
+# IDEs and Editors
+# =============================================================================
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# JetBrains (PyCharm, IntelliJ, etc.)
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Vim
+*.swp
+*.swo
+*.swn
+*~
+tags
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Xcode
+*.xcodeproj/
+*.xcworkspace/
+
+# =============================================================================
+# AI-Assisted Development Tools
+# =============================================================================
+
+# General AI tool directories
+.ai/
+.assistant/
+.copilot/
+
+# Cursor
+.cursorignore
+.cursorindexingignore
+.cursor/
+
+# Aider
+.aider*
+
+# Continue
+.continue/
+
+# Codeium
+.codeium/
+
+# Tabnine
+.tabnine/
+
+# Amazon Q / CodeWhisperer
+.aws/codewhisperer/
+.amazonq/
+
+# Windsurf
+.windsurf/
+
+# Sourcegraph / Cody
+.sourcegraph/
+
+# =============================================================================
+# OS Files
+# =============================================================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.directory
+
+# =============================================================================
+# uv
+# =============================================================================
+.python-version
+
+# =============================================================================
+# DuckDB
+# =============================================================================
+*.duckdb
+*.duckdb.wal
+
+# =============================================================================
+# Project-Specific
+# =============================================================================
+.env
+.env.local
+*.log

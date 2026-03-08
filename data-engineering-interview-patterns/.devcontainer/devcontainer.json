@@ -1,0 +1,21 @@
+{
+    "name": "Data Engineering Interview Patterns",
+    "image": "mcr.microsoft.com/devcontainers/python:3.12",
+    "features": {
+        "ghcr.io/astral-sh/uv-devcontainer-feature/uv:1": {}
+    },
+    "postCreateCommand": "uv sync",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "ms-python.vscode-pylance"
+            ],
+            "settings": {
+                "python.testing.pytestEnabled": true,
+                "python.testing.pytestArgs": ["."],
+                "editor.formatOnSave": true
+            }
+        }
+    }
+}

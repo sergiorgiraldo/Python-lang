@@ -1,0 +1,22 @@
+/*
+LeetCode 618: Students Report By Geography
+
+Pivot student names by continent. Each continent becomes a column.
+Students within each continent are sorted alphabetically.
+
+Pattern: ROW_NUMBER for positional alignment + conditional aggregation for pivot
+*/
+
+WITH numbered AS (
+    SELECT name,
+           continent,
+           ROW_NUMBER() OVER (PARTITION BY continent ORDER BY name) AS rn
+    FROM Student_Geo
+)
+SELECT
+    MAX(CASE WHEN continent = 'America' THEN name END) AS America,
+    MAX(CASE WHEN continent = 'Asia' THEN name END) AS Asia,
+    MAX(CASE WHEN continent = 'Europe' THEN name END) AS Europe
+FROM numbered
+GROUP BY rn
+ORDER BY rn;

@@ -1,0 +1,39 @@
+[project]
+name = "data-engineering-interview-patterns"
+version = "1.0.0"
+description = "Comprehensive interview prep for data engineers - algorithm patterns, SQL problems and system design"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "duckdb>=1.4.4",
+    "mmh3>=5.2.0",
+]
+
+[project.optional-dependencies]
+spark = ["pyspark>=3.5"]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=6.0",
+    "ruff>=0.9",
+    "mypy>=1.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["patterns", "sql", "benchmarks", "spark"]
+python_files = ["*_test.py", "*_vs_*.py", "graph_topo_sort.py", "interval_merge.py"]
+
+[tool.ruff]
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_ignores = true

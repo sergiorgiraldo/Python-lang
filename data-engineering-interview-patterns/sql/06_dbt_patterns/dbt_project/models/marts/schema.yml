@@ -1,0 +1,34 @@
+version: 2
+
+models:
+  - name: fct_orders
+    description: "Order fact table with customer attributes"
+    columns:
+      - name: order_id
+        tests:
+          - unique
+          - not_null
+      - name: line_total
+        tests:
+          - not_null
+
+  - name: rpt_daily_revenue
+    description: "Daily revenue aggregation with running total"
+    columns:
+      - name: order_date
+        tests:
+          - unique
+          - not_null
+      - name: total_revenue
+        tests:
+          - not_null
+
+  - name: rpt_customer_cohorts
+    description: "Customer cohort analysis by signup month"
+    columns:
+      - name: cohort_month
+        tests:
+          - unique
+          - not_null
+      - name: conversion_rate_pct
+        description: "Percentage of cohort that placed at least one order"

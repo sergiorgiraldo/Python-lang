@@ -1,0 +1,13 @@
+event_id,user_id,event_type,event_timestamp,page_url,session_id
+1,100,page_view,2024-01-15 10:00:00,/home,
+2,100,page_view,2024-01-15 10:02:00,/products,
+3,100,add_to_cart,2024-01-15 10:05:00,/products/10,
+4,100,page_view,2024-01-15 10:30:00,/checkout,
+5,100,purchase,2024-01-15 10:32:00,/checkout/confirm,
+6,101,page_view,2024-01-15 11:00:00,/home,
+7,101,page_view,2024-01-15 11:01:00,/products,
+8,100,page_view,2024-01-15 14:00:00,/home,
+9,100,page_view,2024-01-15 14:05:00,/account,
+10,101,page_view,2024-01-15 14:30:00,/home,
+11,100,page_view,2024-01-15 10:00:00,/home,
+12,100,page_view,2024-01-15 10:02:00,/products,

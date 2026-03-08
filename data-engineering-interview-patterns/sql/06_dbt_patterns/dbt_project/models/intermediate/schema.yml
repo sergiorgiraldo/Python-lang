@@ -1,0 +1,36 @@
+version: 2
+
+models:
+  - name: int_deduped_events
+    description: "Events with session IDs assigned via gap detection"
+    columns:
+      - name: event_id
+        tests:
+          - unique
+          - not_null
+      - name: session_id
+        tests:
+          - not_null
+
+  - name: int_customer_orders
+    description: "Customer dimension enriched with order aggregates"
+    columns:
+      - name: customer_id
+        tests:
+          - unique
+          - not_null
+      - name: customer_status
+        tests:
+          - accepted_values:
+              values: ['never_ordered', 'active', 'lapsing', 'churned']
+
+  - name: int_customers_scd2
+    description: "SCD Type 2 customer dimension with address history"
+    columns:
+      - name: customer_id
+        description: "Not unique (multiple versions per customer)"
+        tests:
+          - not_null
+      - name: is_current
+        tests:
+          - not_null

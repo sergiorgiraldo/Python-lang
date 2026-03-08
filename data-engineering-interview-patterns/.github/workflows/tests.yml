@@ -1,0 +1,64 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        run: uv python install ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Run tests
+        run: uv run pytest patterns/ sql/ benchmarks/ --tb=short -q
+
+      - name: Run tests with verbose output (on failure)
+        if: failure()
+        run: uv run pytest patterns/ sql/ benchmarks/ --tb=long -v
+
+  test-spark:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        run: uv python install ${{ matrix.python-version }}
+
+      - name: Install dependencies with Spark
+        run: uv sync --extra spark
+
+      - name: Run Spark tests
+        run: uv run pytest spark/ --tb=short -q
+
+      - name: Run Spark tests with verbose output (on failure)
+        if: failure()
+        run: uv run pytest spark/ --tb=long -v
